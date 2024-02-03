@@ -1,3 +1,24 @@
+ContextMap AsIsPropertiesContextMap {
+  type SYSTEM_LANDSCAPE
+  state AS_IS
+
+  contains PropertiesInspection, DocumentationManagement, CommunicationManagement
+
+  PropertiesInspection [SK]<->[SK] DocumentationManagement
+}
+
+BoundedContext PropertiesInspection implements PropertiesManagement {
+  type = FEATURE
+}
+
+BoundedContext DocumentationManagement implements PropertiesManagement {
+  type = FEATURE
+}
+
+BoundedContext CommunicationManagement implements PropertiesManagement {
+  type = FEATURE
+}
+
 Domain Properties {
 	domainVisionStatement "Crear un centro neurálgico para la gestión integral de propiedades comerciales, ofreciendo una experiencia fluida y eficiente para propietarios, inquilinos y otros actores."
 
@@ -23,7 +44,7 @@ Domain Properties {
 }
 
 Domain MarketAnalysis {
-	Subdomain SalesManagement {
+	Subdomain SalesAnalytics {
 		domainVisionStatement "Proporcionar una comprensión clara de las tendencias de ventas históricas y actuales, empoderando la toma de decisiones informadas sobre la adquisición de propiedades, la fijación de precios y el posicionamiento en el mercado."
 		type CORE_DOMAIN
 	}
