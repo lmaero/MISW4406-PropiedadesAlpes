@@ -1,0 +1,40 @@
+Domain Properties {
+	domainVisionStatement "Crear un centro neurálgico para la gestión integral de propiedades comerciales, ofreciendo una experiencia fluida y eficiente para propietarios, inquilinos y otros actores."
+
+	Subdomain PropertiesManagement {
+		domainVisionStatement "Facilitar la gestión eficiente y precisa de las propiedades en todas sus dimensiones, incluyendo detalles, documentación, mantenimiento y comunicación."
+		type CORE_DOMAIN
+	}
+
+	Subdomain AvailabilityManagement {
+		domainVisionStatement "Ofrecer una visión integral de la disponibilidad de las propiedades, asegurando datos precisos y en tiempo real para la toma de decisiones informadas en las actividades de alquiler y arrendamiento."
+		type CORE_DOMAIN
+	}
+
+	Subdomain TransactionsManagement {
+		domainVisionStatement "Agilizar y centralizar todos los procesos de transacción, incluyendo alquiler, venta y renovaciones, fomentando la transparencia y optimizando los resultados financieros."
+		type CORE_DOMAIN
+	}
+
+	Subdomain OccupantsManagement {
+		domainVisionStatement "Facilitar la gestión eficaz de los inquilinos, abarcando la información de los mismos, los contratos de alquiler, la comunicación y la construcción de la comunidad."
+		type CORE_DOMAIN
+	}
+}
+
+Domain MarketAnalysis {
+	Subdomain SalesManagement {
+		domainVisionStatement "Proporcionar una comprensión clara de las tendencias de ventas históricas y actuales, empoderando la toma de decisiones informadas sobre la adquisición de propiedades, la fijación de precios y el posicionamiento en el mercado."
+		type CORE_DOMAIN
+	}
+	
+	Subdomain MarketTrends {
+		domainVisionStatement "Descubrir y predecir las tendencias clave que configuran el mercado de propiedades comerciales, ofreciendo una perspectiva prospectiva para los stakeholders."
+		type CORE_DOMAIN
+	}
+	
+	Subdomain CompetitionAnalysis {
+		domainVisionStatement "Ofrecer una lente estratégica sobre el panorama competitivo, proporcionando información sobre las actividades de los competidores, sus fortalezas y debilidades para informar la diferenciación en el mercado."
+		type CORE_DOMAIN
+	}
+}
