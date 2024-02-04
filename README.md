@@ -5,6 +5,10 @@
 - Camilo Andres Gálvez Vidal
 - Luis Miguel Guzman Perez
 
+## Repositorio
+
+[Link al repositorio](https://github.com/lmaero/MISW4406-PropiedadesAlpes)
+
 ## Estructura del proyecto
 - Archivos de configuración (.gitignore, .gitpod.yml, .gitpod.Dockerfile, build.gradle)
 - Directorio docs con los archivos .cml de ContextMapper (domain.cml, domain-to-be.cml)
