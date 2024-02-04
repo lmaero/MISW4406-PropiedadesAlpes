@@ -21,27 +21,57 @@ ContextMap AsIsPropertiesContextMap {
   PropertiesInspection [SK]<->[SK] Documentation
 }
 
-BoundedContext PropertiesInspection implements PropertiesManagement
-BoundedContext Documentation implements PropertiesManagement
-BoundedContext Communication implements PropertiesManagement
+BoundedContext PropertiesInspection implements PropertiesManagement {
+	domainVisionStatement "Recopilación precisa y actualizada de datos sobre las propiedades"
+}
+BoundedContext Documentation implements PropertiesManagement {
+	domainVisionStatement "Almacenamiento y gestión eficiente de documentos"
+}
+BoundedContext Communication implements PropertiesManagement {
+	domainVisionStatement "Interacción clara y oportuna con propietarios e inquilinos"
+}
 
-BoundedContext Availability implements AvailabilityManagement
+BoundedContext Availability implements AvailabilityManagement {
+	domainVisionStatement "Publicación precisa y actualizada de propiedades disponibles"
+}
 
-BoundedContext Contracts implements TransactionsManagement
-BoundedContext Payments implements TransactionsManagement
-BoundedContext Monitoring implements TransactionsManagement
-BoundedContext Notifications implements TransactionsManagement
+BoundedContext Contracts implements TransactionsManagement {
+	domainVisionStatement "Negociación y formalización eficiente de contratos"
+}
+BoundedContext Payments implements TransactionsManagement {
+	domainVisionStatement "Procesamiento seguro y eficiente de pagos"
+}
+BoundedContext Monitoring implements TransactionsManagement {
+	domainVisionStatement "Seguimiento efectivo del cumplimiento de contratos"
+}
+BoundedContext Notifications implements TransactionsManagement {
+	domainVisionStatement "Habilitar la comunicación oportuna y relevante con usuarios clave del sistema, proporcionando notificaciones sobre eventos y actualizaciones relacionadas con transacciones de propiedades comerciales"
+}
 
-BoundedContext IdentityVerification implements UsersManagement
+BoundedContext IdentityVerification implements UsersManagement {
+	domainVisionStatement "Garantizar la seguridad y confianza en el sistema mediante la verificación eficaz de la identidad de usuarios, protegiendo tanto a propietarios como a inquilinos y contribuyendo a un entorno comercial transparente."
+}
 
-BoundedContext DataAnalysis implements SalesAnalytics
+BoundedContext DataAnalysis implements SalesAnalytics {
+	domainVisionStatement "Transformar datos dispersos sobre ventas de propiedades en información significativa y accionable, permitiendo tomar decisiones estratégicas sobre inversiones, precios y posicionamiento en el mercado inmobiliario."
+}
 
-BoundedContext MarketDataCollection implements MarketTrends
-BoundedContext DemandAnalysis implements MarketTrends
-BoundedContext InvestmentOpportunities implements MarketTrends
+BoundedContext MarketDataCollection implements MarketTrends {
+	domainVisionStatement "Recopilar y analizar sistemáticamente datos del mercado inmobiliario comercial, identificando tendencias clave que sirvan de base para la toma de decisiones informadas a corto y largo plazo"
+}
+BoundedContext DemandAnalysis implements MarketTrends {
+	domainVisionStatement "Predecir con precisión la demanda de propiedades comerciales en diferentes segmentos y áreas del mercado, anticipándose a las necesidades y optimizando la rentabilidad de las inversiones inmobiliarias."
+}
+BoundedContext InvestmentOpportunities implements MarketTrends {
+	domainVisionStatement "Identificar y evaluar de manera objetiva las oportunidades de inversión más atractivas en el mercado inmobiliario comercial, guiando a los stakeholders hacia opciones rentables y alineadas con sus objetivos"
+}
 
-BoundedContext CompetitionDataCollection implements CompetitionAnalysis
-BoundedContext StrengthsAndWeeknesses implements CompetitionAnalysis
+BoundedContext CompetitionDataCollection implements CompetitionAnalysis {
+	domainVisionStatement "Mantener un conocimiento profundo y actualizado de las actividades, precios y fortalezas de los competidores en el mercado inmobiliario comercial, permitiendo desarrollar estrategias diferenciadoras y competitivas"
+}
+BoundedContext StrengthsAndWeeknesses implements CompetitionAnalysis {
+	domainVisionStatement "Realizar una evaluación continua y objetiva de las fortalezas y debilidades propias en comparación con la competencia, identificando áreas de mejora y oportunidades para optimizar el posicionamiento en el mercado."
+}
 
 Domain Properties {
 	domainVisionStatement "Crear un centro neurálgico para la gestión integral de propiedades comerciales, ofreciendo una experiencia fluida y eficiente para propietarios, inquilinos y otros actores."
