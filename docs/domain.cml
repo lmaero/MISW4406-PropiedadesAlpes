@@ -2,8 +2,8 @@ ContextMap AsIsPropertiesContextMap {
   type SYSTEM_LANDSCAPE
   state AS_IS
 
-  contains PropertiesInspection
-  contains Documentation
+  contains PropertiesData
+  contains DocumentationData
   contains Communication
   contains Availability
   contains Contracts
@@ -18,13 +18,27 @@ ContextMap AsIsPropertiesContextMap {
   contains CompetitionDataCollection
   contains StrengthsAndWeeknesses
 
-  PropertiesInspection [SK]<->[SK] Documentation
+  PropertiesData [SK]<->[SK] DocumentationData
+  PropertiesData [P]<->[P] Monitoring
+  PropertiesData [P]<->[P] Communication
+  Notifications [D]<-[U] Communication
+  Notifications [D]<-[U] Payments
+  PropertiesData [U,OHS]->[D] Availability
+  DocumentationData [U]->[D] Contracts
+  Payments [SK]<->[SK] Contracts
+  IdentityVerification [U,OHS]->[D,ACL] DocumentationData
+  DataAnalysis [D,ACL]<-[U,OHS] PropertiesData
+  DataAnalysis [D,ACL]<-[U,OHS] CompetitionDataCollection
+  DataAnalysis [D,ACL]<-[U,OHS] MarketDataCollection
+  DemandAnalysis [D]<-[U,OHS] DataAnalysis
+  InvestmentOpportunities [D]<-[U,OHS] DataAnalysis
+  StrengthsAndWeeknesses [D]<-[U,OHS] InvestmentOpportunities
 }
 
-BoundedContext PropertiesInspection implements PropertiesManagement {
+BoundedContext PropertiesData implements PropertiesManagement {
 	domainVisionStatement "Recopilación precisa y actualizada de datos sobre las propiedades"
 }
-BoundedContext Documentation implements PropertiesManagement {
+BoundedContext DocumentationData implements PropertiesManagement {
 	domainVisionStatement "Almacenamiento y gestión eficiente de documentos"
 }
 BoundedContext Communication implements PropertiesManagement {
@@ -73,7 +87,7 @@ BoundedContext StrengthsAndWeeknesses implements CompetitionAnalysis {
 	domainVisionStatement "Realizar una evaluación continua y objetiva de las fortalezas y debilidades propias en comparación con la competencia, identificando áreas de mejora y oportunidades para optimizar el posicionamiento en el mercado."
 }
 
-Domain Properties {
+Domain PropertiesData {
 	domainVisionStatement "Crear un centro neurálgico para la gestión integral de propiedades comerciales, ofreciendo una experiencia fluida y eficiente para propietarios, inquilinos y otros actores."
 
 	Subdomain PropertiesManagement {
