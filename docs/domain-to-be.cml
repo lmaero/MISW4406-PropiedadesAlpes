@@ -1,0 +1,171 @@
+ContextMap ToBePropertiesContextMap {
+  type SYSTEM_LANDSCAPE
+  state TO_BE
+
+  contains PropertiesData
+  contains DocumentationData
+  contains Communication
+  contains Availability
+  contains Contracts
+  contains Payments
+  contains Monitoring
+  contains Notifications
+  contains IdentityVerification
+  contains DataAnalysis
+  contains MarketDataCollection
+  contains DemandAnalysis
+  contains InvestmentOpportunities
+  contains CompetitionDataCollection
+  contains StrengthsAndWeeknesses
+  contains Currencies
+  contains Measurements
+  contains DataSources
+  contains PrivacyProtection
+
+  PropertiesData [SK]<->[SK] DocumentationData
+  PropertiesData [P]<->[P] Monitoring
+  PropertiesData [P]<->[P] Communication
+  Notifications [D]<-[U] Communication
+  Notifications [D]<-[U] Payments
+  PropertiesData [U,OHS]->[D] Availability
+  DocumentationData [U]->[D] Contracts
+  Payments [SK]<->[SK] Contracts
+  IdentityVerification [U,OHS]->[D,ACL] DocumentationData
+  DataAnalysis [D,ACL]<-[U,OHS] PropertiesData
+  DataAnalysis [D,ACL]<-[U,OHS] CompetitionDataCollection
+  DataAnalysis [D,ACL]<-[U,OHS] MarketDataCollection
+  DemandAnalysis [D]<-[U,OHS] DataAnalysis
+  InvestmentOpportunities [D]<-[U,OHS] DataAnalysis
+  StrengthsAndWeeknesses [D]<-[U,OHS] InvestmentOpportunities
+  PropertiesData [SK]<->[SK] Currencies
+  Payments [SK]<->[SK] Currencies
+  PropertiesData [SK]<->[SK] Measurements
+  PrivacyProtection [D,ACL]<-[U,OHS] DataSources
+  PropertiesData [D]<-[U] PrivacyProtection
+}
+
+BoundedContext PropertiesData implements PropertiesManagement {
+	domainVisionStatement "Recopilación precisa y actualizada de datos sobre las propiedades"
+}
+BoundedContext DocumentationData implements PropertiesManagement {
+	domainVisionStatement "Almacenamiento y gestión eficiente de documentos"
+}
+BoundedContext Communication implements PropertiesManagement {
+	domainVisionStatement "Interacción clara y oportuna con propietarios e inquilinos"
+}
+
+BoundedContext Availability implements AvailabilityManagement {
+	domainVisionStatement "Publicación precisa y actualizada de propiedades disponibles"
+}
+
+BoundedContext Contracts implements TransactionsManagement {
+	domainVisionStatement "Negociación y formalización eficiente de contratos"
+}
+BoundedContext Payments implements TransactionsManagement {
+	domainVisionStatement "Procesamiento seguro y eficiente de pagos"
+}
+BoundedContext Monitoring implements TransactionsManagement {
+	domainVisionStatement "Seguimiento efectivo del cumplimiento de contratos"
+}
+BoundedContext Notifications implements TransactionsManagement {
+	domainVisionStatement "Habilitar la comunicación oportuna y relevante con usuarios clave del sistema, proporcionando notificaciones sobre eventos y actualizaciones relacionadas con transacciones de propiedades comerciales"
+}
+
+BoundedContext IdentityVerification implements UsersManagement {
+	domainVisionStatement "Garantizar la seguridad y confianza en el sistema mediante la verificación eficaz de la identidad de usuarios, protegiendo tanto a propietarios como a inquilinos y contribuyendo a un entorno comercial transparente."
+}
+
+BoundedContext DataAnalysis implements SalesAnalytics {
+	domainVisionStatement "Transformar datos dispersos sobre ventas de propiedades en información significativa y accionable, permitiendo tomar decisiones estratégicas sobre inversiones, precios y posicionamiento en el mercado inmobiliario."
+}
+
+BoundedContext MarketDataCollection implements MarketTrends {
+	domainVisionStatement "Recopilar y analizar sistemáticamente datos del mercado inmobiliario comercial, identificando tendencias clave que sirvan de base para la toma de decisiones informadas a corto y largo plazo"
+}
+BoundedContext DemandAnalysis implements MarketTrends {
+	domainVisionStatement "Predecir con precisión la demanda de propiedades comerciales en diferentes segmentos y áreas del mercado, anticipándose a las necesidades y optimizando la rentabilidad de las inversiones inmobiliarias."
+}
+BoundedContext InvestmentOpportunities implements MarketTrends {
+	domainVisionStatement "Identificar y evaluar de manera objetiva las oportunidades de inversión más atractivas en el mercado inmobiliario comercial, guiando a los stakeholders hacia opciones rentables y alineadas con sus objetivos"
+}
+
+BoundedContext CompetitionDataCollection implements CompetitionAnalysis {
+	domainVisionStatement "Mantener un conocimiento profundo y actualizado de las actividades, precios y fortalezas de los competidores en el mercado inmobiliario comercial, permitiendo desarrollar estrategias diferenciadoras y competitivas"
+}
+BoundedContext StrengthsAndWeeknesses implements CompetitionAnalysis {
+	domainVisionStatement "Realizar una evaluación continua y objetiva de las fortalezas y debilidades propias en comparación con la competencia, identificando áreas de mejora y oportunidades para optimizar el posicionamiento en el mercado."
+}
+
+BoundedContext Currencies implements CurrenciesManagement {
+	domainVisionStatement "Gestionar de manera efectiva, precisa y transparente múltiples monedas en el sistema, facilitando transacciones globales, análisis financieros y reportes confiables, que permitan la toma de decisiones estratégicas en un entorno multidivisa."
+}
+BoundedContext Measurements implements MeasurementManagement {
+	domainVisionStatement "Asegurar la precisión, estandarización y trazabilidad de las mediciones de propiedades, garantizando la fiabilidad de la información, la comparabilidad de datos, el cumplimiento de normativas y la toma de decisiones informadas en el mercado inmobiliario"
+}
+BoundedContext DataSources implements DataSourcesManagement {
+	domainVisionStatement "Integrar, gestionar y disponibilizar datos de diversas fuentes de forma eficiente, segura y confiable, habilitando la generación de insights valiosos, la toma de decisiones estratégicas y la optimización de procesos en el negocio inmobiliario."
+}
+BoundedContext PrivacyProtection implements LocalPrivacyProtection {
+	domainVisionStatement "Proteger los datos personales y sensibles de usuarios y del negocio, cumpliendo con las normativas locales de privacidad en cada jurisdicción, fortaleciendo la confianza, la transparencia y la reputación del sistema, y minimizando los riesgos legales y reputacionales."
+}
+
+Domain PropertiesData {
+	domainVisionStatement "Crear un centro neurálgico para la gestión integral de propiedades comerciales, ofreciendo una experiencia fluida y eficiente para propietarios, inquilinos y otros actores."
+
+	Subdomain PropertiesManagement {
+		domainVisionStatement "Facilitar la gestión eficiente y precisa de las propiedades en todas sus dimensiones, incluyendo detalles, documentación, mantenimiento y comunicación."
+		type CORE_DOMAIN
+	}
+
+	Subdomain AvailabilityManagement {
+		domainVisionStatement "Ofrecer una visión integral de la disponibilidad de las propiedades, asegurando datos precisos y en tiempo real para la toma de decisiones informadas en las actividades de alquiler y arrendamiento."
+		type CORE_DOMAIN
+	}
+
+	Subdomain TransactionsManagement {
+		domainVisionStatement "Agilizar y centralizar todos los procesos de transacción, incluyendo alquiler, venta y renovaciones, fomentando la transparencia y optimizando los resultados financieros."
+		type CORE_DOMAIN
+	}
+
+	Subdomain UsersManagement {
+		domainVisionStatement "Facilitar la gestión eficaz de los usuarios, abarcando la información de los mismos, los contratos de alquiler, la comunicación y la construcción de la comunidad."
+		type CORE_DOMAIN
+	}
+
+    Subdomain CurrenciesManagement {
+		domainVisionStatement "Habilitar la gestión precisa y eficiente de múltiples monedas en las transacciones, análisis y reportes del sistema, garantizando la transparencia financiera y la adaptación a los mercados globales."
+		type CORE_DOMAIN
+	}
+
+    Subdomain MeasurementManagement {
+		domainVisionStatement "Asegurar la precisión y estandarización de las mediciones de propiedades, facilitando la comparación, la toma de decisiones informadas y el cumplimiento de normativas en el ámbito inmobiliario."
+		type CORE_DOMAIN
+	}
+
+    Subdomain DataSourcesManagement {
+		domainVisionStatement "Garantizar la calidad, disponibilidad y accesibilidad de los datos provenientes de diversas fuentes, impulsando la toma de decisiones informadas, la generación de insights valiosos y la agilidad en los procesos del negocio inmobiliario."
+		type CORE_DOMAIN
+	}
+
+    Subdomain LocalPrivacyProtection {
+		domainVisionStatement "Empoderar a los usuarios y al negocio con la confianza y transparencia necesarias para operar en un entorno digital seguro, garantizando el cumplimiento de las normativas locales de privacidad y la protección de datos sensibles en cada jurisdicción."
+		type CORE_DOMAIN
+	}
+}
+
+Domain MarketAnalysis {
+	Subdomain SalesAnalytics {
+		domainVisionStatement "Proporcionar una comprensión clara de las tendencias de ventas históricas y actuales, empoderando la toma de decisiones informadas sobre la adquisición de propiedades, la fijación de precios y el posicionamiento en el mercado."
+		type CORE_DOMAIN
+	}
+	
+	Subdomain MarketTrends {
+		domainVisionStatement "Descubrir y predecir las tendencias clave que configuran el mercado de propiedades comerciales, ofreciendo una perspectiva prospectiva para los stakeholders."
+		type CORE_DOMAIN
+	}
+	
+	Subdomain CompetitionAnalysis {
+		domainVisionStatement "Ofrecer una lente estratégica sobre el panorama competitivo, proporcionando información sobre las actividades de los competidores, sus fortalezas y debilidades para informar la diferenciación en el mercado."
+		type CORE_DOMAIN
+	}
+}
