@@ -2,22 +2,46 @@ ContextMap AsIsPropertiesContextMap {
   type SYSTEM_LANDSCAPE
   state AS_IS
 
-  contains PropertiesInspection, DocumentationManagement, CommunicationManagement
+  contains PropertiesInspection
+  contains Documentation
+  contains Communication
+  contains Availability
+  contains Contracts
+  contains Payments
+  contains Monitoring
+  contains Notifications
+  contains IdentityVerification
+  contains DataAnalysis
+  contains MarketDataCollection
+  contains DemandAnalysis
+  contains InvestmentOpportunities
+  contains CompetitionDataCollection
+  contains StrengthsAndWeeknesses
 
-  PropertiesInspection [SK]<->[SK] DocumentationManagement
+  PropertiesInspection [SK]<->[SK] Documentation
 }
 
-BoundedContext PropertiesInspection implements PropertiesManagement {
-  type = FEATURE
-}
+BoundedContext PropertiesInspection implements PropertiesManagement
+BoundedContext Documentation implements PropertiesManagement
+BoundedContext Communication implements PropertiesManagement
 
-BoundedContext DocumentationManagement implements PropertiesManagement {
-  type = FEATURE
-}
+BoundedContext Availability implements AvailabilityManagement
 
-BoundedContext CommunicationManagement implements PropertiesManagement {
-  type = FEATURE
-}
+BoundedContext Contracts implements TransactionsManagement
+BoundedContext Payments implements TransactionsManagement
+BoundedContext Monitoring implements TransactionsManagement
+BoundedContext Notifications implements TransactionsManagement
+
+BoundedContext IdentityVerification implements UsersManagement
+
+BoundedContext DataAnalysis implements SalesAnalytics
+
+BoundedContext MarketDataCollection implements MarketTrends
+BoundedContext DemandAnalysis implements MarketTrends
+BoundedContext InvestmentOpportunities implements MarketTrends
+
+BoundedContext CompetitionDataCollection implements CompetitionAnalysis
+BoundedContext StrengthsAndWeeknesses implements CompetitionAnalysis
 
 Domain Properties {
 	domainVisionStatement "Crear un centro neurálgico para la gestión integral de propiedades comerciales, ofreciendo una experiencia fluida y eficiente para propietarios, inquilinos y otros actores."
@@ -37,8 +61,8 @@ Domain Properties {
 		type CORE_DOMAIN
 	}
 
-	Subdomain OccupantsManagement {
-		domainVisionStatement "Facilitar la gestión eficaz de los inquilinos, abarcando la información de los mismos, los contratos de alquiler, la comunicación y la construcción de la comunidad."
+	Subdomain UsersManagement {
+		domainVisionStatement "Facilitar la gestión eficaz de los usuarios, abarcando la información de los mismos, los contratos de alquiler, la comunicación y la construcción de la comunidad."
 		type CORE_DOMAIN
 	}
 }
