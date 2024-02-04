@@ -9,6 +9,10 @@
 - Archivos de configuración (.gitignore, .gitpod.yml, .gitpod.Dockerfile, build.gradle)
 - Directorio docs con los archivos .cml de ContextMapper (domain.cml, domain-to-be.cml)
 
+## GitPod
+
+[Crear Workspace de GitPod](http://gitpod.io/#https://github.com/lmaero/MISW4406-PropiedadesAlpes)
+
 ### Documentación de dominios y sub-dominios
 Los dominios y subdominios con sus respectivos vision statements se encuentran en los vínculos a continuación:
 
@@ -16,7 +20,9 @@ Los dominios y subdominios con sus respectivos vision statements se encuentran e
 - [TO-BE](https://github.com/lmaero/MISW4406-PropiedadesAlpes/blob/97933d28b58d6a57d6ce04a40a738ec228f698b4/docs/domain-to-be.cml#L112-L171)
 
 ### Documentación del lenguaje ubicuo
-El archivo .zip de la entrega contiene una carpeta llamada lenguajes, dentro de esta, dos PDF's, uno con el lenguaje ubicuo para el AS-IS, y el otro con el TO-BE
+El archivo .zip de la entrega contiene una carpeta llamada assets, dentro de esta, un PDF que contiene el lenguaje ubicuo para el AS-IS, y el TO-BE. Igualmente se puede encontrar dentro del repositorio, en el siguiente vínculo:
+
+[Lenguajes Ubicuos](https://github.com/lmaero/MISW4406-PropiedadesAlpes/blob/6696d07c35637b19ef2148a73cf9d4e40780a05d/assets/MISW4406-Lenguajes.pdf)
 
 ### Documentación de contextos acotados
 Los contextos acotados con sus respectivos vision statements y relaciones se encuentran en los siguientes vínculos, adicionamente encontramos las imágenes producidas líneas abajo:
