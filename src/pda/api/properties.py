@@ -3,13 +3,12 @@ import json
 from flask import request, Response
 
 import pda.seedwork.presentation.api as api
-from pda.modules.properties.application.commands.create_property import \
-    CreateProperty
+from pda.modules.properties.application.commands.create_property import CreateProperty
 from pda.modules.properties.application.mappers import PropertyMapperDTOJSON
 from pda.seedwork.application.commands import execute_command
 from pda.seedwork.domain.exceptions import DomainException
 
-app = api.create_blueprint("properties", "/property")
+app = api.create_blueprint("properties", "/properties")
 
 
 @app.route("/", methods="POST")

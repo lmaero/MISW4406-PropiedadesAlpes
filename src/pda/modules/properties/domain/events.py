@@ -9,25 +9,19 @@ from pda.seedwork.domain.events import EventDomain
 
 @dataclass
 class CreatedProperty(EventDomain):
-    id_reserva: uuid.UUID = None
-    id_cliente: uuid.UUID = None
-    estado: str = None
-    fecha_creacion: datetime = None
+    id_property: uuid.UUID = None
+    availability: bool = None
+    created_at: datetime = None
 
 
 @dataclass
 class LeasedProperty(EventDomain):
-    id_reserva: uuid.UUID = None
-    fecha_actualizacion: datetime = None
+    id_tenant: uuid.UUID = None
+    updated_at: datetime = None
 
 
 @dataclass
-class ReservaAprobada(EventDomain):
-    id_reserva: uuid.UUID = None
-    fecha_actualizacion: datetime = None
-
-
-@dataclass
-class ReservaPagada(EventDomain):
-    id_reserva: uuid.UUID = None
-    fecha_actualizacion: datetime = None
+class ReturnedProperty(EventDomain):
+    id_property: uuid.UUID = None
+    id_tenant: uuid.UUID = None
+    updated_at: datetime = None
