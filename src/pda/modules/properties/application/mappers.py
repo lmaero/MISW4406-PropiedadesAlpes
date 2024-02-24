@@ -4,16 +4,24 @@ from pda.modules.properties.domain.value_objects import (
 )
 from pda.seedwork.application.dto import Mapper as AppMap
 from pda.seedwork.domain.repositories import Mapper as RepMap
-from .dto import PropertyDTO, TenantDTO, TransactionDTO
+from .dto import PaymentDTO, TransactionDTO, LeaseDTO
 from ..domain.entities import Property
 
 
-class PropertyMapperDTOJSON(AppMap):
-    def _process_tenant(self, tenant: dict) -> TenantDTO:
-        tenant_dto = TenantDTO()
-        for key, value in tenant.items():
-            setattr(tenant_dto, key, value)
-        return tenant_dto
+class TransactionMapperDTOJson(AppMap):
+    def _process_lease(self, lease: dict) -> LeaseDTO:
+        payments_dto: list[PaymentDTO] = list()
+
+        for payment in lease.get("payments", list()):
+            payments_dto.append(
+                PaymentDTO(
+                    payment.get("id"),
+                    payment.get("amount"),
+                    payment.get("date"),
+                )
+            )
+
+        return LeaseDTO(payments_dto)
 
     def _process_transaction(self, transaction: dict) -> TransactionDTO:
         transaction_dto = TransactionDTO()
@@ -25,7 +33,7 @@ class PropertyMapperDTOJSON(AppMap):
         property_dto = PropertyDTO()
 
         for tenant in external.get("tenants", list()):
-            property_dto.tenants.append(self._process_tenant(tenant))
+            property_dto.tenants.append(self._process_lease(tenant))
 
         for transactions in external.get("transactions", list()):
             property_dto.transactions.append(self._process_transaction(transactions))
@@ -39,7 +47,7 @@ class PropertyMapperDTOJSON(AppMap):
 class PropertyMapper(RepMap):
     _DATE_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
-    def _process_tenant(self, tenant_dto: TenantDTO) -> Tenant:
+    def _process_tenant(self, tenant_dto: PaymentDTO) -> Tenant:
         tenants = list()
 
         for odo_dto in tenant_dto.odos:
@@ -92,7 +100,7 @@ class PropertyMapper(RepMap):
 
                     segmentos.append(SegmentoDTO(legs))
                 odos.append(OdoDTO(segmentos))
-            itinerarios.append(TenantDTO(odos))
+            itinerarios.append(PaymentDTO(odos))
 
         return PropertyDTO(fecha_creacion, fecha_actualizacion, _id, itinerarios)
 
@@ -100,7 +108,7 @@ class PropertyMapper(RepMap):
         property_obj = Property()
         property_obj.tenants = list()
 
-        tenants: list[TenantDTO] = dto.tenants
+        tenants: list[PaymentDTO] = dto.tenants
 
         for tenant in tenants:
             property_obj.tenants.append(self._process_tenant(tenant))
