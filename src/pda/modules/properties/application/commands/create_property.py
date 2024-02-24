@@ -1,52 +1,64 @@
-import json
+from dataclasses import dataclass
 
-from flask import request, Response
+from aeroalpes.modulos.vuelos.infraestructura.repositorios import \
+    RepositorioReservas
+from aeroalpes.seedwork.aplicacion.comandos import ejecutar_commando as comando
+from aeroalpes.seedwork.infraestructura.uow import UnidadTrabajoPuerto
 
-import pda.seedwork.presentation.api as api
-from pda.modules.properties.application.commands.create_property import (
-    CreateTransaction,
+from pda.modules.properties.application.mappers import PropertyMapper
+from pda.modules.properties.domain.entities import Property
+from pda.seedwork.application.commands import Command
+from .base import CreatePropertyBaseHandler
+from ..dto import (
+    TenantDTO,
+    TransactionDTO,
+    LocationDTO,
+    AvailabilityDTO,
+    SizeDTO,
+    PropertyDTO,
 )
-from pda.modules.properties.application.mappers import TransactionMapperDTOJson
-from pda.seedwork.application.commands import execute_command
-from pda.seedwork.domain.exceptions import DomainException
-
-app = api.create_blueprint("properties", "/properties")
 
 
-@app.route("/transactions", methods="POST")
-def create_transaction_async():
-    try:
-        transaction_data = request.json
+@dataclass
+class CreateProperty(Command):
+    id: str
+    created_at: str
+    updated_at: str
+    tenants: list[TenantDTO]
+    transactions: list[TransactionDTO]
+    location: LocationDTO
+    availability: AvailabilityDTO
+    size: SizeDTO
 
-        transaction_mapper = TransactionMapperDTOJson()
-        transaction_dto = transaction_mapper.external_to_dto(transaction_data)
 
-        command = CreateTransaction(
-            transaction_dto.created_at,
-            transaction_dto.updated_at,
-            transaction_dto.id,
-            transaction_dto.tenants,
-            transaction_dto.transactions,
-            transaction_dto.location,
-            transaction_dto.availability,
-            transaction_dto.size,
+class CreatePropertyHandler(CreatePropertyBaseHandler):
+    def handle(self, command: CreateProperty):
+        property_dto = PropertyDTO(
+            id=command.id,
+            created_at=command.created_at,
+            updated_at=command.updated_at,
+            tenants=command.tenants,
+            transactions=command.transactions,
+            location=command.location,
+            availability=command.availability,
+            size=command.size,
         )
 
-        execute_command(command)
+        property: Property = self.properties_factory.create_object(
+            property_dto, PropertyMapper()
+        )
+        property.crear_reserva(property)
 
-        return Response("{}", status=202, mimetype="application/json")
-    except DomainException as e:
-        return Response(
-            json.dumps(dict(error=str(e))), status=400, mimetype="application/json"
+        repositorio = self.repository_factory.create_object(
+            RepositorioReservas.__class__
         )
 
+        UnidadTrabajoPuerto.registrar_batch(repositorio.agregar, property)
+        UnidadTrabajoPuerto.savepoint()
+        UnidadTrabajoPuerto.commit()
 
-@app.route("/<id>", methods="GET")
-def dar_reserva_usando_query(id=None):
-    if id:
-        query_resultado = ejecutar_query(ObtenerReserva(id))
-        map_reserva = MapeadorReservaDTOJson()
 
-        return map_reserva.dto_to_external(query_resultado.resultado)
-    else:
-        return [{"message": "GET!"}]
+@comando.register(CreateProperty)
+def execute_create_property(command: CreateProperty):
+    handler = CreatePropertyHandler()
+    handler.handle(command)
