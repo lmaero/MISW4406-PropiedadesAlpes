@@ -3,31 +3,33 @@ import json
 from flask import request, Response
 
 import pda.seedwork.presentation.api as api
-from pda.modules.properties.application.commands.create_property import CreateProperty
-from pda.modules.properties.application.mappers import PropertyMapperDTOJSON
+from pda.modules.properties.application.commands.create_property import (
+    CreateTransaction,
+)
+from pda.modules.properties.application.mappers import TransactionMapperDTOJson
 from pda.seedwork.application.commands import execute_command
 from pda.seedwork.domain.exceptions import DomainException
 
 app = api.create_blueprint("properties", "/properties")
 
 
-@app.route("/", methods="POST")
-def create_property_async():
+@app.route("/transactions", methods="POST")
+def create_transaction_async():
     try:
-        property_data = request.json
+        transaction_data = request.json
 
-        property_mapper = PropertyMapperDTOJSON()
-        property_dto = property_mapper.external_to_dto(property_data)
+        transaction_mapper = TransactionMapperDTOJson()
+        transaction_dto = transaction_mapper.external_to_dto(transaction_data)
 
-        command = CreateProperty(
-            property_dto.created_at,
-            property_dto.updated_at,
-            property_dto.id,
-            property_dto.tenants,
-            property_dto.transactions,
-            property_dto.location,
-            property_dto.availability,
-            property_dto.size,
+        command = CreateTransaction(
+            transaction_dto.created_at,
+            transaction_dto.updated_at,
+            transaction_dto.id,
+            transaction_dto.tenants,
+            transaction_dto.transactions,
+            transaction_dto.location,
+            transaction_dto.availability,
+            transaction_dto.size,
         )
 
         execute_command(command)
