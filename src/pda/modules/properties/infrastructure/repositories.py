@@ -1,6 +1,10 @@
 from uuid import UUID
+from src.pda.config import db
 from src.pda.modules.properties.domain.factories import PropertyFactory
 from src.pda.modules.properties.domain.repositories import TransactionRepository
+from src.pda.modules.properties.infrastructure.mappers import TransactionMapper
+from src.pda.seedwork.domain.entities import Transaction
+from .dto import Transaction as TransactionDTO
 
 
 class TransactionRepositorySQLite(TransactionRepository):
@@ -9,25 +13,9 @@ class TransactionRepositorySQLite(TransactionRepository):
         self._property_factory: PropertyFactory = PropertyFactory()
 
     @property
-    def fabrica_vuelos(self):
-        return self._fabrica_vuelos
+    def property_factory(self):
+        return self._property_factory
 
-    def get_by_id(self, id: UUID) -> Reserva:
-        reserva_dto = db.session.query(ReservaDTO).filter_by(id=str(id)).one()
-        return self.fabrica_vuelos.crear_objeto(reserva_dto, MapeadorReserva())
-
-    def obtener_todos(self) -> list[Reserva]:
-        # TODO
-        raise NotImplementedError
-
-    def agregar(self, reserva: Reserva):
-        reserva_dto = self.fabrica_vuelos.crear_objeto(reserva, MapeadorReserva())
-        db.session.add(reserva_dto)
-
-    def actualizar(self, reserva: Reserva):
-        # TODO
-        raise NotImplementedError
-
-    def eliminar(self, reserva_id: UUID):
-        # TODO
-        raise NotImplementedError
+    def get_by_id(self, id: UUID) -> Transaction:
+        transaction_dto = db.session.query(TransactionDTO).filter_by(id=str(id)).one()
+        return self._property_factory.create_object(transaction_dto, TransactionMapper())

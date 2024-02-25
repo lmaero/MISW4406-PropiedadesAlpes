@@ -7,22 +7,16 @@ from enum import Enum
 from pda.seedwork.domain.value_objects import ValueObject, Codigo, Ruta, \
     Locacion
 
+@dataclass(frozen=True)
+class Payment(ValueObject):
+    amount: float
+    date: datetime
 
 @dataclass(frozen=True)
-class CodigoIATA(Codigo):
-    pass
+class Lease(ValueObject):
+    payments: list[Payment] = field(default_factory=list)
 
-
-@dataclass(frozen=True)
-class CodigoICAO(Codigo):
-    pass
-
-
-@dataclass(frozen=True)
-class NombreAero:
-    nombre: str
-
-
+#############################
 @dataclass(frozen=True)
 class Leg(Ruta):
     fecha_salida: datetime
@@ -111,28 +105,3 @@ class Odo(Ruta):
 
     def fecha_llegada(self):
         return self.segmentos[-1].fecha_llegada()
-
-
-class Clase(Enum):
-    ECONOMICA = "Economica"
-    PREMIUM = "Premium"
-    EJECUTIVA = "Ejecutiva"
-    PRIMERA = "Primera"
-
-
-class TipoPasajero(Enum):
-    ADULTO = "Adulto"
-    MENOR = "Menor"
-    INFANTE = "Infante"
-
-
-@dataclass(frozen=True)
-class ParametroBusca(ValueObject):
-    pasajeros: list[Pasajero] = field(default_factory=list)
-
-
-class EstadoReserva(str, Enum):
-    APROBADA = "Aprobada"
-    PENDIENTE = "Pendiente"
-    CANCELADA = "Cancelada"
-    PAGADA = "Pagada"

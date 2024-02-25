@@ -9,6 +9,8 @@ from pda.modules.properties.application.commands.create_property import (
 from pda.modules.properties.application.mappers import TransactionMapperDTOJson
 from pda.seedwork.application.commands import execute_command
 from pda.seedwork.domain.exceptions import DomainException
+from src.pda.modules.properties.application.queries.get_property import GetProperty
+from src.pda.seedwork.application.queries import exec_query
 
 app = api.create_blueprint("properties", "/properties")
 
@@ -44,9 +46,9 @@ def create_transaction_async():
 @app.route("/<id>", methods="GET")
 def dar_reserva_usando_query(id=None):
     if id:
-        query_resultado = ejecutar_query(ObtenerReserva(id))
-        map_reserva = MapeadorReservaDTOJson()
+        query_result = exec_query(GetProperty(id))
+        map_transaction = TransactionMapperDTOJson()
 
-        return map_reserva.dto_to_external(query_resultado.resultado)
+        return map_transaction.dto_to_external(query_result.result)
     else:
         return [{"message": "GET!"}]
