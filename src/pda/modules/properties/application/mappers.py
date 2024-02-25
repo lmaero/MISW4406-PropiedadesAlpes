@@ -1,11 +1,10 @@
 from pda.modules.properties.domain.value_objects import (
     Tenant,
-    Odo,
 )
 from pda.seedwork.application.dto import Mapper as AppMap
 from pda.seedwork.domain.repositories import Mapper as RepMap
 from .dto import PaymentDTO, TransactionDTO, LeaseDTO
-from ..domain.entities import Property
+from ..domain.entities import Transaction
 
 
 class TransactionMapperDTOJson(AppMap):
@@ -23,41 +22,37 @@ class TransactionMapperDTOJson(AppMap):
 
         return LeaseDTO(payments_dto)
 
-    def _process_transaction(self, transaction: dict) -> TransactionDTO:
+    def external_to_dto(self, external: dict) -> TransactionDTO:
         transaction_dto = TransactionDTO()
-        for key, value in transaction.items():
-            setattr(transaction_dto, key, value)
+
+        for lease in external.get("leases", list()):
+            transaction_dto.leases.append(self._process_lease(lease))
+
         return transaction_dto
 
-    def external_to_dto(self, external: dict) -> PropertyDTO:
-        property_dto = PropertyDTO()
-
-        for tenant in external.get("tenants", list()):
-            property_dto.tenants.append(self._process_lease(tenant))
-
-        for transactions in external.get("transactions", list()):
-            property_dto.transactions.append(self._process_transaction(transactions))
-
-        return property_dto
-
-    def dto_to_external(self, dto: PropertyDTO) -> dict:
+    def dto_to_external(self, dto: TransactionDTO) -> dict:
         return dto.__dict__
 
 
-class PropertyMapper(RepMap):
+class TransactionMapper(RepMap):
     _DATE_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
-    def _process_tenant(self, tenant_dto: PaymentDTO) -> Tenant:
-        tenants = list()
+    def _process_lease(self, lease_dto: LeaseDTO) -> Lease:
+        payments = list()
 
-        for odo_dto in tenant_dto.odos:
-            segmentos = list()
-            tenants.append(Odo(segmentos))
+        for payment in lease_dto.payments:
+            payments.append(
+                Payment(
+                    payment.get("id"),
+                    payment.get("amount"),
+                    payment.get("date"),
+                )
+            )
 
-        return Tenant(tenants)
+        return Tenant(payments)
 
     def get_type(self) -> type:
-        return Property.__class__
+        return Transaction.__class__
 
     def locacion_a_dict(self, locacion):
         if not locacion:
@@ -72,7 +67,7 @@ class PropertyMapper(RepMap):
             fecha_creacion=locacion.created_at.strftime(self._DATE_FORMAT),
         )
 
-    def entity_to_dto(self, entity: Property) -> PropertyDTO:
+    def entity_to_dto(self, entity: Transaction) -> TransactionDTO:
         fecha_creacion = entity.created_at.strftime(self._DATE_FORMAT)
         fecha_actualizacion = entity.updated_at.strftime(self._DATE_FORMAT)
         _id = str(entity.id)
@@ -102,15 +97,15 @@ class PropertyMapper(RepMap):
                 odos.append(OdoDTO(segmentos))
             itinerarios.append(PaymentDTO(odos))
 
-        return PropertyDTO(fecha_creacion, fecha_actualizacion, _id, itinerarios)
+        return TransactionDTO(fecha_creacion, fecha_actualizacion, _id, itinerarios)
 
-    def dto_to_entity(self, dto: PropertyDTO) -> Property:
-        property_obj = Property()
-        property_obj.tenants = list()
+    def dto_to_entity(self, dto: TransactionDTO) -> Transaction:
+        transaction = Transaction()
+        transaction.leases = list()
 
-        tenants: list[PaymentDTO] = dto.tenants
+        leases_dto: list[LeaseDTO] = dto.leases
 
-        for tenant in tenants:
-            property_obj.tenants.append(self._process_tenant(tenant))
+        for lease in leases_dto:
+            transaction.leases.append(self._process_lease(lease))
 
-        return property_obj
+        return transaction
