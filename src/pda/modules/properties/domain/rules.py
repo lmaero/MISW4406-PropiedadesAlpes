@@ -1,24 +1,6 @@
 from pda.seedwork.domain.rules import BusinessRule
-from .entidades import Pasajero
-from .objetos_valor import Invoice
-from .objetos_valor import TipoPasajero, Lease
-
-
-class MinimoUnAdulto(BusinessRule):
-
-    pasajeros: list[Pasajero]
-
-    def __init__(
-        self, pasajeros, mensaje="Al menos un adulto debe ser parte del itinerario"
-    ):
-        super().__init__(mensaje)
-        self.pasajeros = pasajeros
-
-    def is_valid(self) -> bool:
-        for pasajero in self.pasajeros:
-            if pasajero.tipo == TipoPasajero.ADULTO:
-                return True
-        return False
+from .value_objects import Invoice
+from .value_objects import Lease
 
 
 class ValidPayment(BusinessRule):

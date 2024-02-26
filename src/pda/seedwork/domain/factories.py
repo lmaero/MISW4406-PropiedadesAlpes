@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from .mixins import ValidateMixinRules
-from .repositorios import Mapper
+from .repositories import Mapper
 
 
 class Factory(ABC, ValidateMixinRules):

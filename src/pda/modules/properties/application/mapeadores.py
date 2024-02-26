@@ -1,9 +1,9 @@
 from datetime import datetime
 
-from pda.modules.properties.domain.entidades import Transaction
-from pda.modules.properties.domain.objetos_valor import Lease, Payment
+from pda.modules.properties.domain.entities import Transaction
+from pda.modules.properties.domain.value_objects import Lease, Payment
 from pda.seedwork.application.dto import Mapper as AppMap
-from pda.seedwork.domain.repositorios import Mapper as RepMap
+from pda.seedwork.domain.repositories import Mapper as RepMap
 from .dto import TransactionDTO, LeaseDTO, PaymentDTO
 
 

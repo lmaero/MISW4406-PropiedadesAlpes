@@ -1,6 +1,6 @@
 from abc import ABC
 
-from pda.seedwork.domain.repositorios import Repository
+from pda.seedwork.domain.repositories import Repository
 
 
 class TransactionsRepository(Repository, ABC):

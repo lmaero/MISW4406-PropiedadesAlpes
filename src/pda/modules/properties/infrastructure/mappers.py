@@ -1,9 +1,9 @@
-from pda.modules.properties.domain.entidades import Transaction
-from pda.modules.properties.domain.objetos_valor import (
+from pda.modules.properties.domain.entities import Transaction
+from pda.modules.properties.domain.value_objects import (
     Lease,
     Payment,
 )
-from pda.seedwork.domain.repositorios import Mapper
+from pda.seedwork.domain.repositories import Mapper
 from .dto import Lease as LeaseDTO
 from .dto import Transaction as TransactionDTO
 

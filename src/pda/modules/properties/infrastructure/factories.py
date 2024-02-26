@@ -1,14 +1,13 @@
 from dataclasses import dataclass
 
-from pda.modules.properties.domain.repositorios import (
+from pda.modules.properties.domain.repositories import (
     ProvidersRepository,
     TransactionsRepository,
 )
-from pda.seedwork.domain.fabricas import Factory
-from pda.seedwork.domain.repositorios import Repository
-from .excepciones import FactoryException
-from .repositorios import SQLiteTransactionsRepository, \
-    SQLiteProvidersRepository
+from pda.seedwork.domain.exceptions import FactoryException
+from pda.seedwork.domain.factories import Factory
+from pda.seedwork.domain.repositories import Repository
+from .repositories import SQLiteTransactionsRepository, SQLiteProvidersRepository
 
 
 @dataclass

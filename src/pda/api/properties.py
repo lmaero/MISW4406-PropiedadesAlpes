@@ -8,7 +8,7 @@ from pda.modules.properties.application.mapeadores import TransactionMapperDTOJs
 from pda.modules.properties.application.servicios import TransactionService
 from pda.seedwork.domain.exceptions import DomainException
 
-bp = api.crear_blueprint("properties", "/properties")
+bp = api.create_blueprint("properties", "/properties")
 
 
 @bp.route("/transactions", methods=("POST",))

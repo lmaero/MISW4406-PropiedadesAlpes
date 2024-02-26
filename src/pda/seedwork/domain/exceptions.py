@@ -6,7 +6,7 @@ class DomainException(Exception):
 
 
 class ImmutableEntityIdException(DomainException):
-    def __init__(self, message="El identificador debe ser inmutable"):
+    def __init__(self, message="Identifier should be immutable"):
         self.__message = message
 
     def __str__(self):

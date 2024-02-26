@@ -1,29 +1,14 @@
-""" Repositorios para el manejo de persistencia de objetos de dominio en la capa de infrastructura del dominio de vuelos
-
-En este archivo usted encontrará las diferentes repositorios para
-persistir objetos dominio (agregaciones) en la capa de infraestructura del dominio de vuelos
-
-"""
-
 from uuid import UUID
 
 from pda.config.db import db
-from pda.modules.properties.domain.entidades import Proveedor, Aeropuerto, Transaction
-from pda.modules.properties.domain.fabricas import PropertiesFactory
-from pda.modules.properties.domain.objetos_valor import (
-    NombreAero,
-    Odo,
-    Payment,
-    Segmento,
-    Lease,
-    CodigoIATA,
-)
-from pda.modules.properties.domain.repositorios import (
+from pda.modules.properties.domain.entities import Transaction
+from pda.modules.properties.domain.factories import PropertiesFactory
+from pda.modules.properties.domain.repositories import (
     TransactionsRepository,
     ProvidersRepository,
 )
 from .dto import Transaction as Transaction_DTO
-from .mapeadores import TransactionMapper
+from .mappers import TransactionMapper
 
 
 class SQLiteProvidersRepository(ProvidersRepository):
@@ -33,17 +18,8 @@ class SQLiteProvidersRepository(ProvidersRepository):
         raise NotImplementedError
 
     def get_all(self) -> list[Transaction]:
-        origen = Aeropuerto(codigo="CPT", nombre="Cape Town International")
-        destino = Aeropuerto(codigo="JFK", nombre="JFK International Airport")
-        legs = [Payment(origen=origen, destino=destino)]
-        segmentos = [Segmento(legs)]
-        odos = [Odo(segmentos=segmentos)]
-
-        proveedor = Proveedor(
-            codigo=CodigoIATA(codigo="AV"), nombre=NombreAero(nombre="Avianca")
-        )
-        proveedor.itinerarios = [Lease(payments=odos, proveedor=proveedor)]
-        return [proveedor]
+        # TODO
+        raise NotImplementedError
 
     def add(self, entity: Transaction):
         # TODO

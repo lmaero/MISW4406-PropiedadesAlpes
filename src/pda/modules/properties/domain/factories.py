@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 
 from pda.seedwork.domain.entities import Entity
-from pda.seedwork.domain.fabricas import Factory
-from pda.seedwork.domain.repositorios import Mapper
-from .entidades import Transaction
-from .excepciones import ObjectTypeDoesNotExistInPropertiesException
-from .reglas import PositiveAmount, ValidPayment
+from pda.seedwork.domain.factories import Factory
+from pda.seedwork.domain.repositories import Mapper
+from .entities import Transaction
+from .exceptions import ObjectTypeDoesNotExistInPropertiesException
+from .rules import PositiveAmount, ValidPayment
 
 
 @dataclass

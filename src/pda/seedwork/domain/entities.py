@@ -32,9 +32,3 @@ class Entity:
 @dataclass
 class RootAggregation(Entity, ValidateMixinRules):
     pass
-
-
-@dataclass
-class Locacion(Entity):
-    def __str__(self) -> str:
-        pass
