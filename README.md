@@ -1,41 +1,92 @@
-# MISW4406 - Propiedades de los Alpes
+# Tutorial 3 - Arquitectura Hexagonal
 
-## Integrantes
-- Alonso Daniel Cantu Trejo
-- Camilo Andres Gálvez Vidal
-- Luis Miguel Guzman Perez
+Repositorio con código base para el desarrollo de una arquitectura hexagonal siguiendo los principios y patrones de DDD.
 
-## Repositorio
-
-[Link al repositorio](https://github.com/lmaero/MISW4406-PropiedadesAlpes)
 
 ## Estructura del proyecto
-- Archivos de configuración (.gitignore, .gitpod.yml, .gitpod.Dockerfile, build.gradle)
-- Directorio docs con los archivos .cml de ContextMapper (domain.cml, domain-to-be.cml)
 
-## GitPod
+El repositorio en su raíz está estructurado de la siguiente forma:
 
-[Crear Workspace de GitPod](http://gitpod.io/#https://github.com/lmaero/MISW4406-PropiedadesAlpes)
+- **.github**: Directorio donde se localizan templates para Github y los CI/CD workflows 
+- **src**: En este directorio encuentra el código fuente para AeroAlpes. En la siguiente sección se explica un poco mejor la estructura del mismo ([link](https://blog.ionelmc.ro/2014/05/25/python-packaging/#the-structure%3E) para más información)
+- **tests**: Directorio con todos los archivos de prueba, tanto unitarios como de integración. Sigue el estándar [recomendado por pytest](https://docs.pytest.org/en/7.1.x/explanation/goodpractices.html) y usado por [boto](https://github.com/boto/boto).
+- **.gitignore**: Archivo con la definición de archivos que se deben ignorar en el repositorio GIT
+- **.gitpod.yml**: Archivo que define las tareas/pasos a ejecutar para configurar su workspace en Gitpod
+- **README.md**: El archivo que está leyendo :)
+- **requirements.txt**: Archivo con los requerimientos para el correcto funcionamiento del proyecto (librerias Python)
 
-### Documentación de dominios y sub-dominios
-Los dominios y subdominios con sus respectivos vision statements se encuentran en los vínculos a continuación:
 
-- [AS-IS](https://github.com/lmaero/MISW4406-PropiedadesAlpes/blob/97933d28b58d6a57d6ce04a40a738ec228f698b4/docs/domain.cml#L90-L129)
-- [TO-BE](https://github.com/lmaero/MISW4406-PropiedadesAlpes/blob/97933d28b58d6a57d6ce04a40a738ec228f698b4/docs/domain-to-be.cml#L112-L171)
+## Ejecutar Aplicación
 
-### Documentación del lenguaje ubicuo
-El archivo .zip de la entrega contiene una carpeta llamada assets, dentro de esta, un PDF que contiene el lenguaje ubicuo para el AS-IS, y el TO-BE. Igualmente se puede encontrar dentro del repositorio, en el siguiente vínculo:
+Desde el directorio principal ejecute el siguiente comando.
 
-[Lenguajes Ubicuos](https://github.com/lmaero/MISW4406-PropiedadesAlpes/blob/6696d07c35637b19ef2148a73cf9d4e40780a05d/assets/MISW4406-Lenguajes.pdf)
+```bash
+flask --app src/pda/api run
+```
 
-### Documentación de contextos acotados
-Los contextos acotados con sus respectivos vision statements y relaciones se encuentran en los siguientes vínculos, adicionamente encontramos las imágenes producidas líneas abajo:
+Siempre puede ejecutarlo en modo DEBUG:
 
-- [AS-IS](https://github.com/lmaero/MISW4406-PropiedadesAlpes/blob/97933d28b58d6a57d6ce04a40a738ec228f698b4/docs/domain.cml#L1-L88)
-- [TO-BE](https://github.com/lmaero/MISW4406-PropiedadesAlpes/blob/97933d28b58d6a57d6ce04a40a738ec228f698b4/docs/domain-to-be.cml#L1-L110)
+```bash
+flask --app src/pda/api --debug run
+```
 
-#### AS-IS
-![AS-IS-ContextMap](https://github.com/lmaero/MISW4406-PropiedadesAlpes/assets/60992168/8d6f3dd1-94e9-46f7-ad3e-814b2c5edeb7)
 
-#### TO-BE
-![TO-BE-ContextMap](https://github.com/lmaero/MISW4406-PropiedadesAlpes/assets/60992168/97c922d7-304a-46d8-8f94-fe227fa10636)
+## Request de ejemplo
+
+Los siguientes JSON pueden ser usados para probar el API:
+
+### Reservar
+
+- **Endpoint**: `/vuelos/reserva`
+- **Método**: `POST`
+- **Headers**: `Content-Type='aplication/json'`
+
+```json
+{
+    "itinerarios": [
+        {
+            "odos": [
+                {
+                    "segmentos": [
+                        {
+                            "legs": [
+                                {
+                                    "fecha_salida": "2022-11-22T13:10:00Z",
+                                    "fecha_llegada": "2022-11-22T15:10:00Z",
+                                    "destino": {
+                                        "codigo": "JFK",
+                                        "nombre": "John F. Kennedy International Airport"
+                                    },
+                                    "origen": {
+                                        "codigo": "BOG",
+                                        "nombre": "El Dorado - Bogotá International Airport (BOG)"
+                                    }
+
+                                }
+                            ]
+                        }
+                    ]
+                }
+
+            ]
+        }
+    ]
+}
+```
+
+### Ver Reserva(s)
+
+- **Endpoint**: `/vuelos/reserva/{id}`
+- **Método**: `GET`
+- **Headers**: `Content-Type='aplication/json'`
+
+## Ejecutar pruebas
+
+```bash
+coverage run -m pytest
+```
+
+# Ver reporte de covertura
+```bash
+coverage report
+```

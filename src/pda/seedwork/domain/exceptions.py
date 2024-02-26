@@ -5,8 +5,8 @@ class DomainException(Exception):
     pass
 
 
-class ImmutableIdException(DomainException):
-    def __init__(self, message="ID should be immutable"):
+class ImmutableEntityIdException(DomainException):
+    def __init__(self, message="El identificador debe ser inmutable"):
         self.__message = message
 
     def __str__(self):

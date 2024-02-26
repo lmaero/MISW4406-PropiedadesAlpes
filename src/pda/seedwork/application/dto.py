@@ -9,7 +9,7 @@ class DTO:
 
 class Mapper(ABC):
     @abstractmethod
-    def external_to_dto(self, external: any) -> DTO:
+    def external_to_dto(self, external_data: any) -> DTO:
         pass
 
     @abstractmethod

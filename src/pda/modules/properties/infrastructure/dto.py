@@ -1,34 +1,33 @@
-
-import uuid
-
-from src.pda.config import db
-from sqlalchemy.orm import declarative_base, relationship
-from sqlalchemy import Column, ForeignKey, Integer, Table
+from pda.config.db import db
 
 Base = db.declarative_base()
 
-transactions_lease = Table('transactions_lease', Base.metadata,
-    Column('transaction_id', Integer, ForeignKey('transactions.id')),
-    Column('lease_id', Integer, ForeignKey('leases.id'))
+transactions_leases = db.Table(
+    "transactions_leases",
+    db.Model.metadata,
+    db.Column("transaction_id", db.String, db.ForeignKey("transactions.id")),
+    db.Column("payment_order", db.Integer),
+    db.ForeignKeyConstraint(
+        [
+            "payment_order",
+        ],
+        [
+            "leases.payment_order",
+        ],
+    ),
 )
 
-lease_payments = Table('lease_payments', Base.metadata,
-    Column('payment_id', Integer, ForeignKey('payments.id')),
-    Column('lease_id', Integer, ForeignKey('leases.id'))
-)
 
-class Payment(db.Model):
-    __tablename__ = "payments"
-    id = db.Column(db.String, primary_key=True)
-    amount = db.Column(db.Float, nullable=False)
-    date = db.Column(db.DateTime, nullable=False)
-
-class Leases(db.Model):
+class Lease(db.Model):
     __tablename__ = "leases"
-    payments = db.relationship('Payment', secondary=lease_payments, backref='lease')
+    payment_order = db.Column(db.Integer, primary_key=True, nullable=False)
+
 
 class Transaction(db.Model):
-    __tablename__ = "transacctions"
+    __tablename__ = "transactions"
     id = db.Column(db.String, primary_key=True)
-    currency = db.Column(db.String, nullable=False)
-    leases = db.relationship('Leases', secondary=transactions_lease, backref='transacctions')
+    created_at = db.Column(db.DateTime, nullable=False)
+    updated_at = db.Column(db.DateTime, nullable=False)
+    leases = db.relationship(
+        "Lease", secondary=transactions_leases, backref="transactions"
+    )

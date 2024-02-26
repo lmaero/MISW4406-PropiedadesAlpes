@@ -1,70 +1,64 @@
 import os
 
-from flask import Flask, render_template, request, url_for, redirect, jsonify, session
+from flask import Flask, jsonify
 from flask_swagger import swagger
 
-# Identifica el directorio base
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-def registrar_handlers():
-    import pda.modules.properties.application
 
-def importar_modelos_alchemy():
+# noinspection PyUnresolvedReferences
+def import_sql_alchemy_models():
+    import pda.modules.cliente.infraestructura.dto
+    import pda.modules.hoteles.infraestructura.dto
+    import pda.modules.pagos.infraestructura.dto
+    import pda.modules.precios_dinamicos.infraestructura.dto
+    import pda.modules.vehiculos.infraestructura.dto
     import pda.modules.properties.infrastructure.dto
 
-def comenzar_consumidor():
-    """
-    Este es un código de ejemplo. Aunque esto sea funcional puede ser un poco peligroso tener 
-    threads corriendo por si solos. Mi sugerencia es en estos casos usar un verdadero manejador
-    de procesos y threads como Celery.
-    """
 
-    import threading
-    import pda.modules.properties.infrastructure.consumers as properties
-
-    # Suscripción a eventos
-    threading.Thread(target=properties.subscribe_to_events).start()
-
-    # Suscripción a comandos
-    threading.Thread(target=properties.subscribe_to_commands).start()
-
-def create_app(configuracion={}):
-    # Init la aplicacion de Flask
+def create_app(configuracion=None):
+    # Init la application de Flask
     app = Flask(__name__, instance_relative_config=True)
-    
-    app.config['SQLALCHEMY_DATABASE_URI'] =\
-            'sqlite:///' + os.path.join(basedir, 'database.db')
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    app.secret_key = '9d58f98f-3ae8-4149-a09f-3a8c2012e32c'
-    app.config['SESSION_TYPE'] = 'filesystem'
-    app.config['TESTING'] = configuracion.get('TESTING')
+    # Configuracion de BD
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
+        basedir, "database.db"
+    )
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-     # Inicializa la DB
+    # Inicializa la DB
     from pda.config.db import init_db
+
     init_db(app)
 
     from pda.config.db import db
 
-    importar_modelos_alchemy()
-    registrar_handlers()
+    import_sql_alchemy_models()
 
     with app.app_context():
         db.create_all()
-        if not app.config.get('TESTING'):
-            comenzar_consumidor()
 
-     # Importa Blueprints
+    # Importa Blueprints
+    from . import cliente
+    from . import hoteles
+    from . import pagos
+    from . import precios_dinamicos
+    from . import vehiculos
     from . import properties
 
     # Registro de Blueprints
+    app.register_blueprint(cliente.bp)
+    app.register_blueprint(hoteles.bp)
+    app.register_blueprint(pagos.bp)
+    app.register_blueprint(precios_dinamicos.bp)
+    app.register_blueprint(vehiculos.bp)
     app.register_blueprint(properties.bp)
 
     @app.route("/spec")
     def spec():
         swag = swagger(app)
-        swag['info']['version'] = "1.0"
-        swag['info']['title'] = "My API"
+        swag["info"]["version"] = "1.0"
+        swag["info"]["title"] = "My API"
         return jsonify(swag)
 
     @app.route("/health")
