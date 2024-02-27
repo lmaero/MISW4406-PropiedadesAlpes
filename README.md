@@ -13,6 +13,11 @@ El repositorio en su raíz está estructurado de la siguiente forma:
 - **README.md**: El archivo que está leyendo
 - **requirements.txt**: Archivo con los requerimientos para el correcto funcionamiento del proyecto (librerias Python)
 
+## Escenarios de calidad a probar
+- Escenario #9: Modificabilidad
+- Escenario #2: Escalabilidad
+- Escenario #6: Disponibilidad
+
 
 ## Ejecutar Aplicación
 
