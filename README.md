@@ -18,6 +18,10 @@ El repositorio en su raíz está estructurado de la siguiente forma:
 - Escenario #2: Escalabilidad
 - Escenario #6: Disponibilidad
 
+## Video
+
+[](https://github.com/lmaero/MISW4406-PropiedadesAlpes/assets/60992168/d96e2d76-7657-456d-b775-07b22a2b7201)
+
 
 ## Ejecutar Aplicación
 
