@@ -1,0 +1,35 @@
+version: '3'
+services:
+  # MySQL8
+  db:
+    image: mysql:8
+    hostname: mysqldb
+    container_name: mysqldb
+    cap_add:
+      - SYS_NICE
+    restart: always
+    environment:
+      - MYSQL_DATABASE=transactions
+      - MYSQL_ROOT_PASSWORD=adminadmin
+    profiles: ["pda", "db"]
+    networks:
+      - pulsar
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  
+
+  pda:
+    container_name: pda
+    hostname: pda
+    image: pda/flask
+    profiles: ["pda", "monolith"]
+    labels:
+      SidecarDiscover: "false"
+    depends_on:
+      - db
+    environment:
+      - PDA_ADDRESS=pda
+    ports:
+      - "5000:5000"
