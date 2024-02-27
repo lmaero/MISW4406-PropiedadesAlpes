@@ -35,7 +35,6 @@ class SQLiteProvidersRepository(ProvidersRepository):
 
 
 class SQLiteTransactionsRepository(TransactionsRepository):
-
     def __init__(self):
         self._properties_factory: PropertiesFactory = PropertiesFactory()
 
@@ -60,7 +59,6 @@ class SQLiteTransactionsRepository(TransactionsRepository):
             transaction, TransactionMapper()
         )
         db.session.add(transaction_dto)
-        db.session.commit()
 
     def update(self, transaction: Transaction):
         # TODO

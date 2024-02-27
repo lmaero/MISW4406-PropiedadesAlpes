@@ -2,6 +2,7 @@ import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 
+from .events import DomainEvent
 from .exceptions import ImmutableEntityIdException
 from .mixins import ValidateMixinRules
 from .rules import ImmutableEntityId
@@ -15,7 +16,7 @@ class Entity:
     updated_at: datetime = field(default=datetime.now())
 
     @classmethod
-    def next_id(self) -> uuid.UUID:
+    def next_id(cls) -> uuid.UUID:
         return uuid.uuid4()
 
     @property
@@ -31,4 +32,10 @@ class Entity:
 
 @dataclass
 class RootAggregation(Entity, ValidateMixinRules):
-    pass
+    events: list[DomainEvent] = field(default_factory=list)
+
+    def add_event(self, event: DomainEvent):
+        self.events.append(event)
+
+    def clean_events(self):
+        self.events = list()
