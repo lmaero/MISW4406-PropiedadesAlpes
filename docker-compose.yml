@@ -46,6 +46,8 @@ services:
     depends_on:
       zookeeper:
         condition: service_healthy
+      broker:
+        condition: service_started
 
   bookie:
     image: apachepulsar/pulsar:latest
@@ -62,8 +64,6 @@ services:
       - advertisedAddress=bookie
       - BOOKIE_MEM=-Xms512m -Xmx512m -XX:MaxDirectMemorySize=256m
     depends_on:
-      zookeeper:
-        condition: service_healthy
       pulsar:
         condition: service_completed_successfully
     # Map the local directory to the container to avoid bookie startup failure due to insufficient container disks.
@@ -94,8 +94,6 @@ services:
     depends_on:
       zookeeper:
         condition: service_healthy
-      bookie:
-        condition: service_started
     ports:
       - "6650:6650"
       - "8080:8080"
