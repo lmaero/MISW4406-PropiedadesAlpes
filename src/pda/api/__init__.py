@@ -3,7 +3,7 @@ import os
 from flask import Flask, jsonify
 from flask_swagger import swagger
 
-basedir = os.path.abspath(os.path.dirname(_file_))
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 # noinspection PyUnresolvedReferences
@@ -15,7 +15,6 @@ def register_handlers():
 
 # noinspection PyUnresolvedReferences
 def import_sql_alchemy_models():
-    import pda.modules.client.infrastructure.dto
     import pda.modules.properties.infrastructure.dto
     import pda.modules.tenant.infrastructure.dto
 
@@ -36,7 +35,7 @@ def start_consumer():
 
 
 def create_app(configuration={}):
-    app = Flask(_name_, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True)
 
     app.secret_key = "9d58f98f-3ae8-4149-a09f-3a8c2012e32c"
     app.config["SESSION_TYPE"] = "filesystem"

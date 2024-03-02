@@ -92,15 +92,18 @@ def register_unit_of_work(serialized_obj):
 
 def flask_uow():
     # noinspection PyUnresolvedReferences
-    from pda.config.uow import SQLAlchemyUnitOfWork
+    from pda.config.uow import SQLAlchemyUnitOfWork, PulsarUnitOfWork
     from flask import session
 
     if session.get("uow"):
         return session["uow"]
-    else:
-        uow_serialized = pickle.dumps(SQLAlchemyUnitOfWork())
-        register_unit_of_work(uow_serialized)
-        return uow_serialized
+
+    uow_serialized = pickle.dumps(SQLAlchemyUnitOfWork())
+    if session.get("uow_method") == "pulsar":
+        uow_serialized = pickle.dumps(PulsarUnitOfWork())
+
+    register_unit_of_work(uow_serialized)
+    return uow_serialized
 
 
 def unit_of_work() -> UnitOfWork:

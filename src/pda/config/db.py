@@ -12,13 +12,13 @@ DB_HOSTNAME = os.getenv("DB_HOSTNAME", default="localhost")
 
 
 class DatabaseConfigException(Exception):
-    def _init_(self, message="Configuration file is Null or malformed"):
+    def _init_(self, message="Configuration file is null or malformed"):
         self.message = message
-        super()._init_(self.message)
+        super().__init__(self.message)
 
 
 def database_connection(
-    config, basedir=os.path.abspath(os.path.dirname(_file_))
+    config, basedir=os.path.abspath(os.path.dirname(__file__))
 ) -> str:
     if not isinstance(config, dict):
         raise DatabaseConfigException
