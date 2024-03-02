@@ -50,5 +50,3 @@ while True:
     print("==== Sending email to the user ====")
 
     consumer.acknowledge(msg)
-
-    client.close()
