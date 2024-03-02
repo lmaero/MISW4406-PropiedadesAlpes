@@ -3,44 +3,51 @@ import os
 from flask import Flask, jsonify
 from flask_swagger import swagger
 
-basedir = os.path.abspath(os.path.dirname(__file__))
+basedir = os.path.abspath(os.path.dirname(_file_))
 
 
 # noinspection PyUnresolvedReferences
 def register_handlers():
     import pda.modules.client.application
     import pda.modules.properties.application
+    import pda.modules.tenant.application
 
 
 # noinspection PyUnresolvedReferences
 def import_sql_alchemy_models():
+    import pda.modules.client.infrastructure.dto
     import pda.modules.properties.infrastructure.dto
+    import pda.modules.tenant.infrastructure.dto
 
 
 def start_consumer():
     import threading
     import pda.modules.client.infrastructure.consumers as client
     import pda.modules.properties.infrastructure.consumers as properties
+    import pda.modules.tenant.infrastructure.consumers as tenants
 
     threading.Thread(target=client.subscribe_to_events).start()
     threading.Thread(target=properties.subscribe_to_events).start()
+    threading.Thread(target=tenants.subscribe_to_events).start()
 
     threading.Thread(target=client.subscribe_to_commands).start()
     threading.Thread(target=properties.subscribe_to_commands).start()
+    threading.Thread(target=tenants.subscribe_to_commands).start()
 
 
 def create_app(configuration={}):
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(_name_, instance_relative_config=True)
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
-        basedir, "database.db"
-    )
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.secret_key = "9d58f98f-3ae8-4149-a09f-3a8c2012e32c"
     app.config["SESSION_TYPE"] = "filesystem"
     app.config["TESTING"] = configuration.get("TESTING")
 
-    from pda.config.db import init_db
+    from pda.config.db import init_db, database_connection
+
+    app.config["SQLALCHEMY_DATABASE_URI"] = database_connection(
+        configuration, basedir=basedir
+    )
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     init_db(app)
 
@@ -57,9 +64,11 @@ def create_app(configuration={}):
     # noinspection PyUnresolvedReferences
     from . import client
     from . import properties
+    from . import tenant
 
     app.register_blueprint(client.bp)
     app.register_blueprint(properties.bp)
+    app.register_blueprint(tenant.bp)
 
     @app.route("/spec")
     def spec():
