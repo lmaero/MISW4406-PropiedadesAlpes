@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 
 from pda.modules.properties.application.mappers import TransactionMapper
-from pda.modules.properties.infrastructure.repositories import TransactionsRepository
+from pda.modules.properties.infrastructure.repositories import \
+    TransactionsRepository
 from pda.seedwork.application.queries import Query, QueryResult
 from pda.seedwork.application.queries import execute_query as query
 from .base import TransactionQueryBaseHandler
@@ -13,7 +14,7 @@ class GetTransaction(Query):
 
 
 class GetTransactionHandler(TransactionQueryBaseHandler):
-    def handle(self, query: GetTransaction) -> QueryResult:
+    def handle(self, execute_query: GetTransaction) -> QueryResult:
         transaction = self.repository_factory.create_object(
             TransactionsRepository.__class__
         )
@@ -24,6 +25,6 @@ class GetTransactionHandler(TransactionQueryBaseHandler):
 
 
 @query.register(GetTransaction)
-def execute_get_transaction_query(query: GetTransaction):
+def execute_get_transaction_query(execute_query: GetTransaction):
     handler = GetTransactionHandler()
-    return handler.handle(query)
+    return handler.handle(execute_query)

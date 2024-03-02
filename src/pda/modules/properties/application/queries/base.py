@@ -1,9 +1,11 @@
+from abc import ABC
+
 from pda.modules.properties.domain.factories import PropertiesFactory
 from pda.modules.properties.infrastructure.factories import RepositoryFactory
 from pda.seedwork.application.queries import QueryHandler
 
 
-class TransactionQueryBaseHandler(QueryHandler):
+class TransactionQueryBaseHandler(QueryHandler, ABC):
     def __init__(self):
         self._repository_factory: RepositoryFactory = RepositoryFactory()
         self._properties_factory: PropertiesFactory = PropertiesFactory()

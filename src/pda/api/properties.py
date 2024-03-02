@@ -65,8 +65,9 @@ def create_transaction_command():
 def get_transactions_by_id(identifier=None):
     if identifier:
         sr = TransactionService()
+        transaction_mapper = TransactionMapperDTOJson()
 
-        return sr.get_transaction_by_id(identifier)
+        return transaction_mapper.dto_to_external(sr.get_transaction_by_id(identifier))
     else:
         return [{"message": "GET!"}]
 

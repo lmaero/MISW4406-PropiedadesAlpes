@@ -14,14 +14,14 @@ class Transaction(RootAggregation):
     leases: list[ov.Lease] = field(default_factory=list[ov.Lease])
 
     def create_transaction(self, transaction: Transaction):
-        self.id = transaction.id
+        self.id_client = transaction.id_client
         self.created_at = transaction.created_at
         self.updated_at = transaction.updated_at
         self.leases = transaction.leases
 
         self.add_event(
             CreatedTransaction(
-                id_transaction=self.id,
+                id=self.id,
                 id_client=self.id_client,
                 event_date=self.created_at,
             )

@@ -1,3 +1,5 @@
+from abc import ABC
+
 from pda.seedwork.application.commands import Command, CommandHandler
 
 
@@ -9,5 +11,5 @@ class RegisterUser(Command):
     is_business: bool
 
 
-class RegisterUserHandler(CommandHandler):
+class RegisterUserHandler(CommandHandler, ABC):
     pass

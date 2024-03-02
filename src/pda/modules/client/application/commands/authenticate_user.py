@@ -1,3 +1,5 @@
+from abc import ABC
+
 from pda.seedwork.application.commands import Command, CommandHandler
 
 
@@ -6,5 +8,5 @@ class AuthenticateUser(Command):
     password: str
 
 
-class AuthenticateUserHandler(CommandHandler):
+class AuthenticateUserHandler(CommandHandler, ABC):
     pass
