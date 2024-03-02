@@ -42,3 +42,9 @@ hs_err_pid*
 
 /.venv
 **/__pycache__
+
+# Pulsar data
+data/
+
+# Database
+**/database.db
