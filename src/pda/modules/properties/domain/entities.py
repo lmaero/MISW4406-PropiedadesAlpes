@@ -21,7 +21,7 @@ class Transaction(RootAggregation):
 
         self.add_event(
             CreatedTransaction(
-                id=self.id,
+                id_transaction=self.id,
                 id_client=self.id_client,
                 created_at=self.created_at,
                 updated_at=self.updated_at,
