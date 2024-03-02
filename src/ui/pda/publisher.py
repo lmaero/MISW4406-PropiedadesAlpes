@@ -1,6 +1,8 @@
 import pulsar
 
-client = pulsar.Client("pulsar://localhost:6650")
+from ui.pda.utils import broker_host
+
+client = pulsar.Client(f"pulsar://{broker_host()}:6650")
 producer = client.create_producer("transactions-commands")
 
 for i in range(10):
