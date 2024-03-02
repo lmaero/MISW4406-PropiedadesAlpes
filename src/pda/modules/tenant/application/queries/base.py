@@ -1,7 +1,7 @@
 from abc import ABC
 
 from pda.modules.tenant.domain.factories import TenantFactory
-from pda.modules.tenant.infraestructure.factories import RepositoryFactory
+from pda.modules.tenant.infrastructure.factories import RepositoryFactory
 from pda.seedwork.application.queries import QueryHandler
 
 

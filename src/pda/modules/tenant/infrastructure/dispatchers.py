@@ -3,12 +3,12 @@ import datetime
 import pulsar
 from pulsar.schema import *
 
-from pda.modules.tenant.infraestructure.schema.v1.events import (
+from pda.modules.tenant.infrastructure.schema.v1.events import (
     TenantCreatedPayload,
     CreatedTenantEvent
 )
 
-from pda.modules.tenant.infraestructure.schema.v1.commands import (
+from pda.modules.tenant.infrastructure.schema.v1.commands import (
     CreateTenantPayloadCommand,
     CreateTenantCommand
 )

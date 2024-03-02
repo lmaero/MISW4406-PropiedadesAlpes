@@ -5,10 +5,10 @@ import _pulsar
 import pulsar
 from pulsar.schema import *
 
-from pda.modules.tenant.infraestructure.schema.v1.commands import (
+from pda.modules.tenant.infrastructure.schema.v1.commands import (
     CreateTenantCommand,
 )
-from pda.modules.tenant.infraestructure.schema.v1.events import (
+from pda.modules.tenant.infrastructure.schema.v1.events import (
     CreatedTenantEvent,
 )
 from pda.seedwork.infrastructure import utils

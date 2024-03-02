@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from pda.modules.tenant.application.dto import TenantDTO
 from pda.modules.tenant.application.mappers import TenantMapper
 from pda.modules.tenant.domain.entities import Tenant
-from pda.modules.tenant.infraestructure.repositories import \
+from pda.modules.tenant.infrastructure.repositories import \
     TenantsRepository
 from pda.seedwork.application.commands import Command
 from pda.seedwork.application.commands import execute_command as command
