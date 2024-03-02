@@ -11,4 +11,5 @@ from pda.seedwork.domain.events import DomainEvent
 class CreatedTransaction(DomainEvent):
     id_transaction: uuid.UUID = None
     id_client: uuid.UUID = None
-    event_date: datetime = None
+    created_at: datetime = None
+    updated_at: datetime = None

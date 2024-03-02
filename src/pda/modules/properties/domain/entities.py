@@ -23,6 +23,7 @@ class Transaction(RootAggregation):
             CreatedTransaction(
                 id=self.id,
                 id_client=self.id_client,
-                event_date=self.created_at,
+                created_at=self.created_at,
+                updated_at=self.updated_at,
             )
         )

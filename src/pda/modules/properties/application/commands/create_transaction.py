@@ -22,8 +22,8 @@ class CreateTransaction(Command):
 class CreateTransactionHandler(CreateTransactionBaseHandler):
     def handle(self, comando: CreateTransaction):
         transaction_dto = TransactionDTO(
-            updated_at=comando.updated_at,
             created_at=comando.created_at,
+            updated_at=comando.updated_at,
             id=comando.id,
             leases=comando.leases,
         )
@@ -43,6 +43,6 @@ class CreateTransactionHandler(CreateTransactionBaseHandler):
 
 
 @command.register(CreateTransaction)
-def execute_create_transaction_command(command: CreateTransaction):
+def execute_create_transaction_command(execute_command: CreateTransaction):
     handler = CreateTransactionHandler()
-    handler.handle(command)
+    handler.handle(execute_command)
