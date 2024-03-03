@@ -1,4 +1,6 @@
+import logging
 import pickle
+import traceback
 from abc import ABC, abstractmethod
 from enum import Enum
 
@@ -29,11 +31,13 @@ class UnitOfWork(ABC):
 
     def _get_events(self, batches=None):
         batches = self.batches if batches is None else batches
+        events = list()
         for batch in batches:
             for arg in batch.args:
                 if isinstance(arg, RootAggregation):
-                    return arg.events
-        return list()
+                    events += arg.events
+                    break
+        return events
 
     @abstractmethod
     def _clean_batches(self):
@@ -59,18 +63,33 @@ class UnitOfWork(ABC):
     def savepoint(self):
         raise NotImplementedError
 
-    def register_batch(self, operation, *args, lock=Lock.PESSIMISTIC, **kwargs):
+    def register_batch(
+        self,
+        operation,
+        *args,
+        lock=Lock.PESSIMISTIC,
+        func_repository_events=None,
+        **kwargs,
+    ):
         batch = Batch(operation, lock, *args, **kwargs)
         self.batches.append(batch)
-        self._publish_domain_events(batch)
+        self._publish_domain_events(batch, func_repository_events)
 
-    def _publish_domain_events(self, batch):
+    def _publish_domain_events(self, batch, func_repository_events):
         for event in self._get_events(batches=[batch]):
+            if func_repository_events:
+                func_repository_events(event)
             dispatcher.send(signal=f"{type(event).__name__}Domain", event=event)
 
     def _publish_post_commit_events(self):
-        for event in self._get_events():
-            dispatcher.send(signal=f"{type(event).__name__}Integration", event=event)
+        try:
+            for event in self._get_events():
+                dispatcher.send(
+                    signal=f"{type(event).__name__}Integration", event=event
+                )
+        except:
+            logging.error("ERROR: Cannot subscribe to events topic!")
+            traceback.print_exc()
 
 
 def is_flask():

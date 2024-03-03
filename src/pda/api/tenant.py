@@ -2,19 +2,18 @@ import json
 
 from flask import Response
 from flask import request
+
+from pda.modules.tenant.application.commands.create_tenant import CreateTenant
 from pda.modules.tenant.application.mappers import TenantMapperDTOJson
+from pda.modules.tenant.application.queries.get_tenant import GetTenant
 from pda.modules.tenant.application.services import TenantService
-from pda.modules.tenant.application.commands.create_tenant import (
-    CreateTenant
-)
-from pda.modules.tenant.application.queries.get_tenant import \
-    GetTenant
 from pda.seedwork.application.commands import execute_command
 from pda.seedwork.application.queries import execute_query
 from pda.seedwork.domain.exceptions import DomainException
 from pda.seedwork.presentation import api
 
 bp = api.create_blueprint("tenant", "/tenant")
+
 
 @bp.route("/", methods=("POST",))
 def create_tenant():
@@ -32,6 +31,7 @@ def create_tenant():
         return Response(
             json.dumps(dict(error=str(e))), status=400, mimetype="application/json"
         )
+
 
 @bp.route("/command", methods=("POST",))
 def create_tenant_command():
@@ -57,7 +57,6 @@ def create_tenant_command():
         return Response(
             json.dumps(dict(error=str(e))), status=400, mimetype="application/json"
         )
-    
 
 
 @bp.route("/", methods=("GET",))
@@ -70,6 +69,7 @@ def get_tenant_by_id(identifier=None):
         return tenant_mapper.dto_to_external(sr.get_tenant_by_id(identifier))
     else:
         return [{"message": "GET!"}]
+
 
 @bp.route("/query", methods=("GET",))
 @bp.route("/query/<identifier>", methods=("GET",))
