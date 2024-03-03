@@ -7,5 +7,9 @@ class TransactionsRepository(Repository, ABC):
     pass
 
 
+class TransactionsEventsRepository(Repository, ABC):
+    pass
+
+
 class ProvidersRepository(Repository, ABC):
     pass

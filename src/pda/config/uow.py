@@ -7,6 +7,10 @@ from pda.config.db import db
 from pda.seedwork.infrastructure.uow import UnitOfWork, Batch
 
 
+class UoWException(Exception):
+    pass
+
+
 class SQLAlchemyUnitOfWork(UnitOfWork):
     def __init__(self):
         self._batches: list[Batch] = list()
@@ -22,7 +26,7 @@ class SQLAlchemyUnitOfWork(UnitOfWork):
 
     @property
     def savepoints(self) -> list:
-        return list[db.session.get_nested_transaction()]
+        return []
 
     @property
     def batches(self) -> list[Batch]:
