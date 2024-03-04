@@ -3,7 +3,7 @@ import json
 
 import websockets
 
-from pda.consumer import get_subscription_to_topic
+from ui.pda.consumer import get_subscription_to_topic
 
 consumer = None
 
