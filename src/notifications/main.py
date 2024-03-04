@@ -25,6 +25,7 @@ class TransactionCreatedPayload(Record):
     id_transaction = String()
     id_client = String()
     created_at = Long()
+    updated_at = Long()
 
 
 class CreatedTransactionEvent(IntegrationEvent):

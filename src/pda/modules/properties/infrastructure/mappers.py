@@ -45,6 +45,7 @@ class TransactionEventsMapper(Mapper, ABC):
                 id_transaction=str(entity.id_transaction),
                 id_client=str(entity.id_client),
                 created_at=int(unix_time_millis(event.created_at)),
+                updated_at=int(unix_time_millis(event.updated_at)),
             )
             integration_event = CreatedTransactionEvent(id=str(event.id))
             integration_event.id = str(event.id)
