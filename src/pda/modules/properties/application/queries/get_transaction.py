@@ -16,7 +16,7 @@ class GetTransactionHandler(TransactionQueryBaseHandler):
     def handle(self, query: GetTransaction) -> QueryResult:
         view = self.view_factory.create_object(Transaction)
         transaction = self.properties_factory.create_object(
-            view.get_by(id=query.id)[0], TransactionMapper()
+            view.get_by(query.id), TransactionMapper()
         )
         return QueryResult(result=transaction)
 

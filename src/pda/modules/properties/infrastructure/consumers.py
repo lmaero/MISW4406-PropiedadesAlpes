@@ -60,7 +60,7 @@ def subscribe_to_events(app=None):
             client.close()
 
 
-def subscribe_to_commands():
+def subscribe_to_commands(app=None):
     client = None
     try:
         client = pulsar.Client(f"pulsar://{utils.broker_host()}:6650")

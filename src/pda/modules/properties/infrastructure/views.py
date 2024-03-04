@@ -12,6 +12,6 @@ class TransactionView(View):
             params["id"] = str(id)
 
         if id_client:
-            params["id_cliente"] = str(id_client)
+            params["id_client"] = str(id_client)
 
         return db.session.query(TransactionDTO).filter_by(**params)

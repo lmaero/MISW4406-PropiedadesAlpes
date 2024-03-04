@@ -4,9 +4,12 @@ from abc import ABC, abstractmethod
 
 from pda.modules.properties.domain.entities import Transaction
 from pda.modules.properties.infrastructure.factories import RepositoryFactory
-from pda.modules.properties.infrastructure.repositories import TransactionsRepository
-from pda.seedwork.infrastructure.projections import Projection, ProjectionHandler
-from pda.seedwork.infrastructure.projections import execute_projection as projection
+from pda.modules.properties.infrastructure.repositories import \
+    TransactionsRepository
+from pda.seedwork.infrastructure.projections import Projection, \
+    ProjectionHandler
+from pda.seedwork.infrastructure.projections import \
+    execute_projection as projection
 from pda.seedwork.infrastructure.utils import millis_a_datetime
 from .dto import TransactionAnalytics
 
@@ -50,7 +53,7 @@ class TotalTransactionsProjection(TransactionProjection):
 
 class TransactionsListProjection(TransactionProjection):
     def __init__(self, id_transaction, id_client, created_at, updated_at):
-        self.id_transaction = id_transaction
+        self.id_transaction = id
         self.id_client = id_client
         self.created_at = millis_a_datetime(created_at)
         self.updated_at = millis_a_datetime(updated_at)
@@ -65,8 +68,8 @@ class TransactionsListProjection(TransactionProjection):
 
         repository.add(
             Transaction(
-                id=self.id_transaction,
-                id_client=self.id_client,
+                id=str(self.id_transaction),
+                id_client=str(self.id_client),
                 created_at=self.created_at,
                 updated_at=self.updated_at,
             )
@@ -84,14 +87,14 @@ class TransactionProjectionHandler(ProjectionHandler):
 
 @projection.register(TransactionsListProjection)
 @projection.register(TotalTransactionsProjection)
-def execute_transaction_projection(execute_projection, app=None):
+def execute_transaction_projection(projection, app=None):
     if not app:
         logging.error("ERROR: application context cannot be null")
         return
     try:
         with app.app_context():
             handler = TransactionProjectionHandler()
-            handler.handle(execute_projection)
+            handler.handle(projection)
 
     except:
         traceback.print_exc()

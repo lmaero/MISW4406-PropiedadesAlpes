@@ -15,22 +15,23 @@ def register_handlers():
 
 # noinspection PyUnresolvedReferences
 def import_sql_alchemy_models():
+    import pda.modules.client.infrastructure.dto
     import pda.modules.properties.infrastructure.dto
     import pda.modules.tenant.infrastructure.dto
 
 
-def start_consumer():
+def start_consumer(app):
     import threading
     import pda.modules.client.infrastructure.consumers as client
     import pda.modules.properties.infrastructure.consumers as properties
     import pda.modules.tenant.infrastructure.consumers as tenants
 
     threading.Thread(target=client.subscribe_to_events).start()
-    threading.Thread(target=properties.subscribe_to_events).start()
+    threading.Thread(target=properties.subscribe_to_events, args=[app]).start()
     threading.Thread(target=tenants.subscribe_to_events).start()
 
     threading.Thread(target=client.subscribe_to_commands).start()
-    threading.Thread(target=properties.subscribe_to_commands).start()
+    threading.Thread(target=properties.subscribe_to_commands, args=[app]).start()
     threading.Thread(target=tenants.subscribe_to_commands).start()
 
 
@@ -58,7 +59,7 @@ def create_app(configuration={}):
     with app.app_context():
         db.create_all()
         if not app.config.get("TESTING"):
-            start_consumer()
+            start_consumer(app)
 
     # noinspection PyUnresolvedReferences
     from . import client
