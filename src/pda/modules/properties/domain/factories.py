@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from pda.seedwork.domain.entities import Entity
+from pda.seedwork.domain.events import DomainEvent
 from pda.seedwork.domain.factories import Factory
 from pda.seedwork.domain.repositories import Mapper
 from .entities import Transaction
@@ -11,7 +12,7 @@ from .rules import PositiveAmount, ValidPayment
 @dataclass
 class _TransactionFactory(Factory):
     def create_object(self, obj: any, mapper: Mapper) -> any:
-        if isinstance(obj, Entity):
+        if isinstance(obj, Entity) or isinstance(obj, DomainEvent):
             return mapper.entity_to_dto(obj)
         else:
             transaction: Transaction = mapper.dto_to_entity(obj)

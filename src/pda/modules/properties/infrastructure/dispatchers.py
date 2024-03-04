@@ -1,13 +1,11 @@
 import pulsar
 from pulsar.schema import *
 
-from pda.modules.properties.infrastructure.mappers import TransactionEventsMapper
+from pda.modules.properties.infrastructure.mappers import \
+    TransactionEventsMapper
 from pda.modules.properties.infrastructure.schema.v1.commands import (
     CreateTransactionCommand,
     CreateTransactionPayloadCommand,
-)
-from pda.modules.properties.infrastructure.schema.v1.events import (
-    CreatedTransactionEvent,
 )
 from pda.seedwork.infrastructure import utils
 
@@ -16,11 +14,9 @@ class Dispatcher:
     def __init__(self):
         self.mapper = TransactionEventsMapper()
 
-    def _publish_message(self, message, topic):
+    def _publish_message(self, message, topic, schema):
         client = pulsar.Client(f"pulsar://{utils.broker_host()}:6650")
-        publisher = client.create_producer(
-            topic, schema=AvroSchema(CreatedTransactionEvent)
-        )
+        publisher = client.create_producer(topic, schema=schema)
         publisher.send(message)
         client.close()
 

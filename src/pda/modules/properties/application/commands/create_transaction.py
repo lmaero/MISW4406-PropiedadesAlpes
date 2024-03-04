@@ -47,6 +47,6 @@ class CreateTransactionHandler(CreateTransactionBaseHandler):
 
 
 @command.register(CreateTransaction)
-def execute_create_transaction_command(execute_command: CreateTransaction):
+def execute_create_transaction_command(command: CreateTransaction):
     handler = CreateTransactionHandler()
-    handler.handle(execute_command)
+    handler.handle(command)

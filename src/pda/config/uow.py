@@ -48,7 +48,7 @@ class SQLAlchemyUnitOfWork(UnitOfWork):
         super().rollback()
 
     def savepoint(self):
-        db.session.begin_nested()
+        pass
 
 
 class PulsarUnitOfWork(UnitOfWork):
