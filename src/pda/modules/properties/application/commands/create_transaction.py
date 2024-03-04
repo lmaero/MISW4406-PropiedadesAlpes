@@ -41,7 +41,7 @@ class CreateTransactionHandler(CreateTransactionBaseHandler):
         )
 
         UnitOfWorkPort.register_batch(
-            repository.add, transaction, repository_events_func=repository_events
+            repository.add, transaction, func_repository_events=repository_events.add
         )
         UnitOfWorkPort.commit()
 

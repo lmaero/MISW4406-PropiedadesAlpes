@@ -102,7 +102,7 @@ class SQLAlchemyTransactionEventsRepository(TransactionsEventsRepository, ABC):
         event_dto.id_entity = str(event.id_transaction)
         event_dto.event_date = event.created_at
         event_dto.version = str(transaction_event.spec_version)
-        event_dto.tipo_evento = event.__class__.__name__
+        event_dto.event_type = event.__class__.__name__
         event_dto.content_format = "JSON"
         event_dto.service_name = str(transaction_event.service_name)
         event_dto.content = json_str
