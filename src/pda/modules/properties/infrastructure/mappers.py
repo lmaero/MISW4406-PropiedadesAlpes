@@ -1,8 +1,7 @@
 from abc import ABC
 
 from pda.modules.properties.domain.entities import Transaction
-from pda.modules.properties.domain.events import CreatedTransaction, \
-    TransactionEvent
+from pda.modules.properties.domain.events import CreatedTransaction, TransactionEvent
 from pda.modules.properties.domain.value_objects import (
     Lease,
     Payment,
@@ -19,7 +18,7 @@ class TransactionEventsMapper(Mapper, ABC):
 
     LATEST_VERSION = versions[0]
 
-    def init(self):
+    def __init__(self):
         self.router = {
             CreatedTransaction: self._entity_to_created_transaction,
         }

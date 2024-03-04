@@ -11,8 +11,8 @@ from pda.modules.properties.domain.repositories import (
     ProvidersRepository,
     TransactionsEventsRepository,
 )
-from .dto import Transaction as Transaction_DTO
-from .mappers import TransactionMapper
+from .dto import Transaction as Transaction_DTO, TransactionEvents
+from .mappers import TransactionMapper, TransactionEventsMapper
 
 
 class SQAlchemyProvidersRepository(ProvidersRepository):
@@ -83,7 +83,7 @@ class SQLAlchemyTransactionEventsRepository(TransactionsEventsRepository, ABC):
     def get_by_id(self, id: UUID) -> Transaction:
         transaction_dto = db.session.query(Transaction_DTO).filter_by(id=str(id)).one()
         return self.properties_factory.create_object(
-            transaction_dto, MapadeadorEventosReserva()
+            transaction_dto, TransactionEventsMapper()
         )
 
     def get_all(self) -> list[Transaction]:
@@ -91,22 +91,21 @@ class SQLAlchemyTransactionEventsRepository(TransactionsEventsRepository, ABC):
 
     def add(self, event):
         transaction_event = self.properties_factory.create_object(
-            event, MapadeadorEventosReserva()
+            event, TransactionEventsMapper()
         )
 
         parser_payload = JsonSchema(transaction_event.data.__class__)
         json_str = parser_payload.encode(transaction_event.data)
 
-        # TODO: Change to our entity
-        event_dto = EventosReserva()
+        event_dto = TransactionEvents()
         event_dto.id = str(event.id)
-        event_dto.id_entidad = str(event.id_reserva)
-        event_dto.fecha_evento = event.fecha_creacion
-        event_dto.version = str(transaction_event.specversion)
+        event_dto.id_entity = str(event.id_transaction)
+        event_dto.event_date = event.created_at
+        event_dto.version = str(transaction_event.spec_version)
         event_dto.tipo_evento = event.__class__.__name__
-        event_dto.formato_contenido = "JSON"
-        event_dto.nombre_servicio = str(transaction_event.service_name)
-        event_dto.contenido = json_str
+        event_dto.content_format = "JSON"
+        event_dto.service_name = str(transaction_event.service_name)
+        event_dto.content = json_str
 
         db.session.add(event_dto)
 

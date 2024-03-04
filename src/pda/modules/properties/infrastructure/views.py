@@ -4,7 +4,6 @@ from pda.seedwork.infrastructure.views import View
 from .dto import Transaction as TransactionDTO
 
 
-# TODO: Adapt to our schema
 class TransactionView(View):
     def get_by(id=None, id_client=None, **kwargs) -> [Transaction]:
         params = dict()
@@ -15,5 +14,4 @@ class TransactionView(View):
         if id_client:
             params["id_cliente"] = str(id_client)
 
-        # TODO Convierta ReservaDTO a Reserva y valide que la consulta es correcta
         return db.session.query(TransactionDTO).filter_by(**params)

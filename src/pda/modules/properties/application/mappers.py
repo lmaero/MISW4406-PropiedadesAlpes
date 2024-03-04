@@ -55,6 +55,7 @@ class TransactionMapper(RepMap):
         updated_at = entity.updated_at.strftime(self._DATE_FORMAT)
         _id = str(entity.id)
 
+        # TODO: Replace lis() with actual leases loop
         return TransactionDTO(created_at, updated_at, _id, list())
 
     def dto_to_entity(self, dto: TransactionDTO) -> Transaction:

@@ -45,3 +45,9 @@ class TransactionEvents(db.Model):
     content_format = db.Column(db.String(10), nullable=False)
     service_name = db.Column(db.String(40), nullable=False)
     content = db.Column(db.Text, nullable=False)
+
+
+class TransactionAnalytics(db.Model):
+    __tablename__ = "transactions_analytics"
+    created_at = db.Column(db.Date, primary_key=True)
+    total = db.Column(db.Integer, primary_key=True, nullable=False)

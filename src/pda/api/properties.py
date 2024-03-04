@@ -16,7 +16,7 @@ from pda.seedwork.domain.exceptions import DomainException
 bp = api.create_blueprint("properties", "/properties")
 
 
-@bp.route("/transactions-command", methods=("POST",))
+@bp.route("/transactions", methods=("POST",))
 def create_transaction_command():
     try:
         session["uow_method"] = "pulsar"
@@ -42,8 +42,8 @@ def create_transaction_command():
         )
 
 
-@bp.route("/transaction-query", methods=("GET",))
-@bp.route("/transaction-query/<identifier>", methods=("GET",))
+@bp.route("/transaction", methods=("GET",))
+@bp.route("/transaction/<identifier>", methods=("GET",))
 def get_transaction_query_by_id(identifier=None):
     if identifier:
         query_result = execute_query(GetTransaction(identifier))

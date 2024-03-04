@@ -33,9 +33,14 @@ class Entity:
 @dataclass
 class RootAggregation(Entity, ValidateMixinRules):
     events: list[DomainEvent] = field(default_factory=list)
+    compensation_events: list[DomainEvent] = field(default_factory=list)
 
-    def add_event(self, event: DomainEvent):
+    def add_event(self, event: DomainEvent, compensation_event: DomainEvent = None):
         self.events.append(event)
+
+        if compensation_event:
+            self.compensation_events.append(compensation_event)
 
     def clean_events(self):
         self.events = list()
+        self.compensation_events = list()

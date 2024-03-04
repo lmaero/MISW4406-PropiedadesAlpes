@@ -29,6 +29,16 @@ class UnitOfWork(ABC):
     def __exit__(self, *args):
         self.rollback()
 
+    def _get_events_rollback(self, batches=None):
+        batches = self.batches if batches is None else batches
+        events = list()
+        for batch in batches:
+            for arg in batch.args:
+                if isinstance(arg, RootAggregation):
+                    events += arg.compensation_events
+                    break
+        return events
+
     def _get_events(self, batches=None):
         batches = self.batches if batches is None else batches
         events = list()

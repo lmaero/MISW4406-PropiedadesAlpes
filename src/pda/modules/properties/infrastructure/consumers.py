@@ -12,6 +12,7 @@ from pda.modules.properties.infrastructure.schema.v1.events import (
     CreatedTransactionEvent,
 )
 from pda.seedwork.infrastructure import utils
+from pda.seedwork.infrastructure.projections import execute_projection
 
 
 def subscribe_to_events():
@@ -27,7 +28,23 @@ def subscribe_to_events():
 
         while True:
             message = consumer.receive()
-            print(f"Received Event: {message.value().data}")
+            data = message.value().data
+            print(f"Received Event: {data}")
+
+            execute_projection(
+                ProyeccionReservasTotales(
+                    data.created_at, ProyeccionReservasTotales.ADD
+                ),
+                app=app,
+            )
+            execute_projection(
+                ProyeccionReservasLista(
+                    data.id_transaction,
+                    data.id_client,
+                    data.created_at,
+                ),
+                app=app,
+            )
 
             consumer.acknowledge(message)
 
