@@ -5,6 +5,10 @@ import _pulsar
 import pulsar
 from pulsar.schema import *
 
+from pda.modules.properties.infrastructure.projections import (
+    TotalTransactionsProjection,
+    TransactionsListProjection,
+)
 from pda.modules.properties.infrastructure.schema.v1.commands import (
     CreateTransactionCommand,
 )
@@ -15,7 +19,7 @@ from pda.seedwork.infrastructure import utils
 from pda.seedwork.infrastructure.projections import execute_projection
 
 
-def subscribe_to_events():
+def subscribe_to_events(app=None):
     client = None
     try:
         client = pulsar.Client(f"pulsar://{utils.broker_host()}:6650")
@@ -32,16 +36,17 @@ def subscribe_to_events():
             print(f"Received Event: {data}")
 
             execute_projection(
-                ProyeccionReservasTotales(
-                    data.created_at, ProyeccionReservasTotales.ADD
+                TotalTransactionsProjection(
+                    data.created_at, TotalTransactionsProjection.ADD
                 ),
                 app=app,
             )
             execute_projection(
-                ProyeccionReservasLista(
+                TransactionsListProjection(
                     data.id_transaction,
                     data.id_client,
                     data.created_at,
+                    data.updated_at,
                 ),
                 app=app,
             )
