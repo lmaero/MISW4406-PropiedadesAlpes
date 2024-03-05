@@ -28,6 +28,7 @@ El repositorio en su raíz está estructurado de la siguiente forma:
 [](https://github.com/lmaero/MISW4406-PropiedadesAlpes/assets/60992168/d96e2d76-7657-456d-b775-07b22a2b7201)
 
 ## Video - Entrega 4
+[](https://github.com/lmaero/MISW4406-PropiedadesAlpes/assets/98992754/f93900ed-a8e2-467d-901e-ad9ad97b1b0b)
 
 
 ## Ejecutar Aplicación
