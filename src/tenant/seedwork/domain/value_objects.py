@@ -16,3 +16,18 @@ class Invoice(ABC, ValueObject):
     @abstractmethod
     def date(self) -> datetime:
         pass
+
+@dataclass(frozen=True)
+class Code(ABC, ValueObject):
+    code: str
+    
+@dataclass(frozen=True)
+class Country(ValueObject):
+    code: Code
+    name: str
+
+@dataclass(frozen=True)
+class City(ValueObject):
+    country: ValueObject
+    Code: Code
+    name: str
