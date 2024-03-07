@@ -154,6 +154,24 @@ services:
     ports:
       - "5678:5678"
 
+  # Servicio tenant
+  tenant:
+    build:
+      dockerfile: tenant.Dockerfile
+    container_name: tenant
+    hostname: tenant
+    profiles: ["pda", "tenant"]
+    depends_on:
+      - pda
+      - broker
+    environment:
+      - PDA_ADDRESS=pda
+      - BROKER_HOST=broker
+    networks:
+      - pulsar
+    ports:
+      - "5000:5000"
+
   db:
     image: mysql:8
     hostname: mysqldb
@@ -173,4 +191,4 @@ services:
       - '3306:3306'
     volumes:
       - ./data/mysql:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - $PWD/init.sql:/docker-entrypoint-initdb.d/init.sql
