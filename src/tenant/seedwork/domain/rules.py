@@ -12,7 +12,7 @@ class BusinessRule(ABC):
 
     @abstractmethod
     def is_valid(self) -> bool:
-        pass
+        ...
 
     def __str__(self):
         return f"{self.__class__.__name__} - {self.__message}"

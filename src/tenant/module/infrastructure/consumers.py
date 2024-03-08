@@ -1,7 +1,7 @@
 import logging
 import traceback
-import asyncio
 import pulsar, _pulsar
+import asyncio
 import aiopulsar
 from pulsar.schema import *
 from tenant.seedwork.infrastructure import utils

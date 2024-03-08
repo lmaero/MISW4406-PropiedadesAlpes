@@ -24,4 +24,4 @@ class Rut(ValueObject):
 
 class PaymentMethods(ValueObject):
     # TODO
-    pass
+    ...

@@ -5,7 +5,7 @@ from tenant.seedwork.infrastructure import utils
 
 class Dispatcher:
     def __init__(self):
-        pass
+        ...
 
     def publish_message(self, msg, topic):
         client = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')

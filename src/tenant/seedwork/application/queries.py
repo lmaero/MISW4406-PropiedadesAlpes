@@ -4,7 +4,7 @@ from functools import singledispatch
 
 
 class Query(ABC):
-    pass
+    ...
 
 
 @dataclass

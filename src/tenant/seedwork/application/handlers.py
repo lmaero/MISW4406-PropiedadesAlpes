@@ -1,2 +1,2 @@
 class Handler:
-    pass
+    ...

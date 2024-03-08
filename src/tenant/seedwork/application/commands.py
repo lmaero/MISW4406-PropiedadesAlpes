@@ -3,7 +3,7 @@ from functools import singledispatch
 
 
 class Command:
-    pass
+    ...
 
 
 class CommandHandler(ABC):

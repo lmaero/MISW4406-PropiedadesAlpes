@@ -2,7 +2,7 @@ from .rules import BusinessRule
 
 
 class DomainException(Exception):
-    pass
+    ...
 
 
 class ImmutableEntityIdException(DomainException):

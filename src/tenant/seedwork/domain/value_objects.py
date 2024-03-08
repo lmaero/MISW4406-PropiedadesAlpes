@@ -5,17 +5,17 @@ from datetime import datetime
 
 @dataclass(frozen=True)
 class ValueObject:
-    pass
+    ...
 
 
 class Invoice(ABC, ValueObject):
     @abstractmethod
     def amount(self) -> float:
-        pass
+        ...
 
     @abstractmethod
     def date(self) -> datetime:
-        pass
+        ...
 
 @dataclass(frozen=True)
 class Code(ABC, ValueObject):
