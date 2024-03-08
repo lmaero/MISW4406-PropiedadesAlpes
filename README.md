@@ -69,6 +69,13 @@ Desde el directorio `src` ejecute el siguiente comando
 uvicorn cliente.main:app --host localhost --port 8000 --reload
 ```
 
+### Payments
+Desde el directorio `src` ejecute el siguiente comando
+
+```bash
+uvicorn payments.main:app --host localhost --port 8001 --reload
+```
+
 ### PDA/Transactions
 Desde el directorio principal ejecute el siguiente comando.
 
