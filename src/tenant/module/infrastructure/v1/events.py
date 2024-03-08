@@ -1,5 +1,5 @@
 from pulsar.schema import *
-from tenant.seedwork.infrastructure.schema.v1.events import (IntegrationEvent)
+from tenant.seedwork.infrastructure.schema.v1.events import IntegrationEvent
 from tenant.seedwork.infrastructure.utils import time_millis
 from tenant.module.infrastructure.v1 import TenantType
 import uuid

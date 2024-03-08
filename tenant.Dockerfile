@@ -11,4 +11,4 @@ COPY . .
 
 WORKDIR "/src"
 
-CMD [ "uvicorn", "cliente.main:app", "--host", "localhost", "--port", "8000", "--reload"]
+CMD [ "uvicorn", "tenant.main:app", "--host", "localhost", "--port", "8000", "--reload"]
