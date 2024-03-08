@@ -6,10 +6,9 @@ from pda.modules.sagas.application.commands.tenant import RegisterTenant, Valida
 from pda.modules.sagas.application.commands.payment import PayTransaction, ReversePayment
 
 from pda.modules.properties.application.commands.create_transaction import CreateTransaction
-# from aeroalpes.modulos.vuelos.aplicacion.comandos.aprobar_reserva import AprobarReserva
-# from aeroalpes.modulos.vuelos.aplicacion.comandos.cancelar_reserva import CancelarReserva
-# from aeroalpes.modulos.vuelos.dominio.eventos.reservas import ReservaCreada, ReservaCancelada, ReservaAprobada, CreacionReservaFallida, AprobacionReservaFallida
-from pda.modules.properties.domain.events import CreatedTransaction
+from pda.modules.properties.application.commands.approve_transaction import ApproveTransaction
+from pda.modules.properties.application.commands.cancel_transaction import CancelTransaction
+from pda.modules.properties.domain.events import CreatedTransaction, ApprovedTransaction, CanceledTransaction, FailedApprovedTransaction, FailedCreateTransaction
 from pda.modules.sagas.domain.events.tenant import CreatedTenant, TenantValidated
 from pda.modules.sagas.domain.events.payment import PaidTransaction, ReversedPayment, FailedPayment
 
@@ -25,8 +24,9 @@ class TransactionCoordinator(OrchestrationCoordinator):
             # Transaccion(index=4, comando=AprobarReserva, evento=ReservaAprobada, error=AprobacionReservaFallida, compensacion=CancelarReserva),
             # Fin(index=5)
             Start(index=0),
-            SagaTransaction(index=1, command=CreateTransaction, event=CreatedTransaction, error=None, compensation=None),
+            SagaTransaction(index=1, command=CreateTransaction, event=CreatedTransaction, error=FailedCreateTransaction, compensation=CancelTransaction),
             SagaTransaction(index=2, command=PayTransaction, event=PaidTransaction, error=FailedPayment, compensation=ReversePayment),
+            SagaTransaction(index=3, command=ApproveTransaction, event=ApprovedTransaction, error=FailedApprovedTransaction, compensation=CancelTransaction),
             End(index=3)
         ]
     
