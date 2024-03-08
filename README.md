@@ -59,8 +59,16 @@ python src/ui/main.py
 Desde el directorio principal ejecute el siguiente comando.
 
 ```bash
-python src/ui/main.py
+python src/notifications/main.py
 ```
+
+### Tenant
+Desde el directorio `src` ejecute el siguiente comando
+
+```bash
+uvicorn cliente.main:app --host localhost --port 8000 --reload
+```
+
 ### PDA/Transactions
 Desde el directorio principal ejecute el siguiente comando.
 
