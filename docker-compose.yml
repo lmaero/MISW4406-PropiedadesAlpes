@@ -154,6 +154,24 @@ services:
     ports:
       - "5678:5678"
 
+  # Servicio payments
+  payments:
+    build:
+      dockerfile: payments.Dockerfile
+    container_name: payments
+    hostname: payments
+    profiles: ["pda", "payments"]
+    depends_on:
+      - pda
+      - broker
+    environment:
+      - PDA_ADDRESS=pda
+      - BROKER_HOST=broker
+    networks:
+      - pulsar
+    ports:
+      - "8100:8100"
+
   db:
     image: mysql:8
     hostname: mysqldb
