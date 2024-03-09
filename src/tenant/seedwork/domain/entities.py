@@ -7,6 +7,7 @@ from .exceptions import ImmutableEntityIdException
 from .mixins import ValidateMixinRules
 from .rules import ImmutableEntityId
 
+
 @dataclass
 class Entity:
     id: uuid.UUID = field(hash=True)
@@ -27,7 +28,7 @@ class Entity:
         if not ImmutableEntityId(self).is_valid():
             raise ImmutableEntityIdException()
         self._id = self.next_id()
-        
+
 
 @dataclass
 class RootAggregation(Entity, ValidateMixinRules):
@@ -47,5 +48,4 @@ class RootAggregation(Entity, ValidateMixinRules):
 
 @dataclass
 class Location(Entity):
-    def __str__(self) -> str:
-        ...
+    def __str__(self) -> str: ...

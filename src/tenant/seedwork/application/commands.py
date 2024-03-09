@@ -2,8 +2,7 @@ from abc import ABC, abstractmethod
 from functools import singledispatch
 
 
-class Command:
-    ...
+class Command: ...
 
 
 class CommandHandler(ABC):

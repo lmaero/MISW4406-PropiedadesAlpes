@@ -1,20 +1,25 @@
-from pulsar.schema import *
-from .utils import time_millis
 import uuid
 
+from pulsar.schema import *
+
+from .utils import time_millis
+
+
 class PaidTransaction(Record):
-    id = String(),
-    correlation_id = String(),
-    transaction_id = String(),
+    id = (String(),)
+    correlation_id = (String(),)
+    transaction_id = (String(),)
     amount = Double()
     amount_vat = Double()
     creation_date = Long()
- 
+
+
 class ReversedPayment(Record):
     id = String()
     correlation_id = String()
     transaction_id = String()
     update_date = Long()
+
 
 class EventPayment(Record):
     id = String(default=str(uuid.uuid4()))

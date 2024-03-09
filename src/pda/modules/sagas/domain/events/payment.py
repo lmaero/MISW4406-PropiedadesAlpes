@@ -1,11 +1,14 @@
 from __future__ import annotations
-from dataclasses import dataclass, field
-from pda.seedwork.domain.events import (DomainEvent)
-from datetime import datetime
-import uuid
 
-class PaymentEvent(DomainEvent):
-    ...
+import uuid
+from dataclasses import dataclass
+from datetime import datetime
+
+from pda.seedwork.domain.events import DomainEvent
+
+
+class PaymentEvent(DomainEvent): ...
+
 
 @dataclass
 class PaidTransaction(PaymentEvent):
@@ -15,6 +18,7 @@ class PaidTransaction(PaymentEvent):
     amount_vat: float = None
     update_at: datetime = None
 
+
 @dataclass
 class FailedPayment(PaymentEvent):
     transaction_id: uuid.UUID = None
@@ -22,6 +26,7 @@ class FailedPayment(PaymentEvent):
     amount: float = None
     amount_vat: float = None
     update_at: datetime = None
+
 
 @dataclass
 class ReversedPayment(PaymentEvent):

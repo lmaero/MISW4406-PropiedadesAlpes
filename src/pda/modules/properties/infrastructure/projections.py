@@ -4,12 +4,9 @@ from abc import ABC, abstractmethod
 
 from pda.modules.properties.domain.entities import Transaction
 from pda.modules.properties.infrastructure.factories import RepositoryFactory
-from pda.modules.properties.infrastructure.repositories import \
-    TransactionsRepository
-from pda.seedwork.infrastructure.projections import Projection, \
-    ProjectionHandler
-from pda.seedwork.infrastructure.projections import \
-    execute_projection as projection
+from pda.modules.properties.infrastructure.repositories import TransactionsRepository
+from pda.seedwork.infrastructure.projections import Projection, ProjectionHandler
+from pda.seedwork.infrastructure.projections import execute_projection as projection
 from pda.seedwork.infrastructure.utils import millis_a_datetime
 from .dto import TransactionAnalytics
 

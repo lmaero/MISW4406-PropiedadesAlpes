@@ -1,8 +1,10 @@
-class RegisterTenant():
+class RegisterTenant:
     pass
 
-class DeactivateTenant():
+
+class DeactivateTenant:
     pass
 
-class ValidateTenant():
+
+class ValidateTenant:
     pass

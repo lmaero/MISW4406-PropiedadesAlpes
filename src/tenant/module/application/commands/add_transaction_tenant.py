@@ -1,12 +1,13 @@
-from tenant.seedwork.application.commands import Command, CommandHandler
+import uuid
 from dataclasses import dataclass
 
-import uuid
+from tenant.seedwork.application.commands import Command, CommandHandler
+
 
 @dataclass
 class CommandAddTransactionTenant(Command):
     id_tenant: uuid.UUID
     id_transaction: uuid.UUID
 
-class CommandAddTransactionTenantHandler(CommandHandler):
-    ...
+
+class CommandAddTransactionTenantHandler(CommandHandler): ...

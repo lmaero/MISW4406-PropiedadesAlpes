@@ -1,8 +1,11 @@
-from pydantic import BaseSettings
 from typing import Any
+
+from pydantic import BaseSettings
+
 
 class Config(BaseSettings):
     APP_VERSION: str = "1"
+
 
 settings = Config()
 

@@ -1,17 +1,18 @@
+import logging
+import pickle
+import traceback
 from abc import ABC, abstractmethod
 from enum import Enum
 
-from tenant.seedwork.domain.entities import RootAggregation
 from pydispatch import dispatcher
 
-import pickle
-import logging
-import traceback
+from tenant.seedwork.domain.entities import RootAggregation
 
 
 class Lock(Enum):
     OPTIMISTIC = 1
     PESSIMISTIC = 2
+
 
 class Batch:
     def __init__(self, operation, lock: Lock, *args, **kwargs):
@@ -19,6 +20,7 @@ class Batch:
         self.args = args
         self.lock = lock
         self.kwargs = kwargs
+
 
 class UnitOfWork(ABC):
     def __enter__(self):
@@ -98,14 +100,16 @@ class UnitOfWork(ABC):
         except:
             logging.error("ERROR: Cannot subscribe to events topic!")
             traceback.print_exc()
-            
+
 
 def is_flask():
     try:
         from flask import session
+
         return True
     except Exception as e:
         return False
+
 
 def register_unit_of_work(serialized_obj):
     # noinspection PyUnresolvedReferences
@@ -113,6 +117,7 @@ def register_unit_of_work(serialized_obj):
     from flask import session
 
     session["uow"] = serialized_obj
+
 
 def flask_uow():
     # noinspection PyUnresolvedReferences
@@ -129,11 +134,13 @@ def flask_uow():
     register_unit_of_work(uow_serialized)
     return uow_serialized
 
+
 def unit_of_work() -> UnitOfWork:
     if is_flask():
         return pickle.loads(flask_uow())
     else:
         raise Exception("There's no existing unit of work")
+
 
 def save_unit_of_work(uow: UnitOfWork):
     if is_flask():

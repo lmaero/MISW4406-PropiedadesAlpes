@@ -1,8 +1,7 @@
 import pulsar
 from pulsar.schema import *
 
-from pda.modules.properties.infrastructure.mappers import \
-    TransactionEventsMapper
+from pda.modules.properties.infrastructure.mappers import TransactionEventsMapper
 from pda.modules.properties.infrastructure.schema.v1.commands import (
     CreateTransactionCommand,
     CreateTransactionPayloadCommand,

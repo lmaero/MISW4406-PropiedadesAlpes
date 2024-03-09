@@ -1,16 +1,32 @@
-from pda.seedwork.application.sagas import OrchestrationCoordinator, SagaTransaction, Start, End
-from pda.seedwork.application.commands import Command
+from pda.seedwork.application.sagas import (
+    OrchestrationCoordinator,
+    SagaTransaction,
+    Start,
+    End,
+)
 from pda.seedwork.domain.events import DomainEvent
 
-from pda.modules.sagas.application.commands.tenant import RegisterTenant, ValidateTenant
-from pda.modules.sagas.application.commands.payment import PayTransaction, ReversePayment
+from pda.modules.sagas.application.commands.payment import (
+    PayTransaction,
+    ReversePayment,
+)
 
-from pda.modules.properties.application.commands.create_transaction import CreateTransaction
-from pda.modules.properties.application.commands.approve_transaction import ApproveTransaction
-from pda.modules.properties.application.commands.cancel_transaction import CancelTransaction
-from pda.modules.properties.domain.events import CreatedTransaction, ApprovedTransaction, CanceledTransaction, FailedApprovedTransaction, FailedCreateTransaction
-from pda.modules.sagas.domain.events.tenant import CreatedTenant, TenantValidated
-from pda.modules.sagas.domain.events.payment import PaidTransaction, ReversedPayment, FailedPayment
+from pda.modules.properties.application.commands.create_transaction import (
+    CreateTransaction,
+)
+from pda.modules.properties.application.commands.approve_transaction import (
+    ApproveTransaction,
+)
+from pda.modules.properties.application.commands.cancel_transaction import (
+    CancelTransaction,
+)
+from pda.modules.properties.domain.events import (
+    CreatedTransaction,
+    ApprovedTransaction,
+    FailedApprovedTransaction,
+    FailedCreateTransaction,
+)
+from pda.modules.sagas.domain.events.payment import PaidTransaction, FailedPayment
 
 
 class TransactionCoordinator(OrchestrationCoordinator):
@@ -24,18 +40,35 @@ class TransactionCoordinator(OrchestrationCoordinator):
             # Transaccion(index=4, comando=AprobarReserva, evento=ReservaAprobada, error=AprobacionReservaFallida, compensacion=CancelarReserva),
             # Fin(index=5)
             Start(index=0),
-            SagaTransaction(index=1, command=CreateTransaction, event=CreatedTransaction, error=FailedCreateTransaction, compensation=CancelTransaction),
-            SagaTransaction(index=2, command=PayTransaction, event=PaidTransaction, error=FailedPayment, compensation=ReversePayment),
-            SagaTransaction(index=3, command=ApproveTransaction, event=ApprovedTransaction, error=FailedApprovedTransaction, compensation=CancelTransaction),
-            End(index=3)
+            SagaTransaction(
+                index=1,
+                command=CreateTransaction,
+                event=CreatedTransaction,
+                error=FailedCreateTransaction,
+                compensation=CancelTransaction,
+            ),
+            SagaTransaction(
+                index=2,
+                command=PayTransaction,
+                event=PaidTransaction,
+                error=FailedPayment,
+                compensation=ReversePayment,
+            ),
+            SagaTransaction(
+                index=3,
+                command=ApproveTransaction,
+                event=ApprovedTransaction,
+                error=FailedApprovedTransaction,
+                compensation=CancelTransaction,
+            ),
+            End(index=3),
         ]
-    
+
     def start(self):
         self.persist_in_saga_log(self.steps[0])
-    
+
     def finish(self):
         self.persist_in_saga_log(self.steps[-1])
-        
 
     def persist_in_saga_log(self, msg):
         # TODO Persistir estado en DB
@@ -47,4 +80,3 @@ class TransactionCoordinator(OrchestrationCoordinator):
         # Por ejemplo si el evento que llega es ReservaCreada y el tipo_comando es PagarReserva
         # Debemos usar los atributos de ReservaCreada para crear el comando PagarReserva
         ...
-    

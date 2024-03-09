@@ -1,6 +1,6 @@
-
-class PayTransaction():
+class PayTransaction:
     pass
 
-class ReversePayment():
+
+class ReversePayment:
     pass

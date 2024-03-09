@@ -1,4 +1,4 @@
 from .mixins import ValidateMixinRules
- 
-class Services(ValidateMixinRules):
-    ...
+
+
+class Services(ValidateMixinRules): ...

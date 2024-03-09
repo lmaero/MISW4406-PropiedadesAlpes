@@ -1,4 +1,4 @@
 from .messages import Message
 
-class IntegrationCommand(Message):
-    ...
+
+class IntegrationCommand(Message): ...

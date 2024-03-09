@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class RegisterTenant(BaseModel):
     name: str
     last_name: str

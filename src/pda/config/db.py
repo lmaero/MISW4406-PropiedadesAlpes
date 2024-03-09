@@ -5,7 +5,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = None
 
-
 DB_USERNAME = os.getenv("DB_USERNAME", default="root")
 DB_PASSWORD = os.getenv("DB_PASSWORD", default="admin")
 DB_HOSTNAME = os.getenv("DB_HOSTNAME", default="localhost")

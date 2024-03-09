@@ -21,6 +21,7 @@ class CreatedTransaction(TransactionEvent):
     amount: float = None
     amount_vat: float = None
 
+
 @dataclass
 class FailedCreateTransaction(TransactionEvent):
     id_transaction: uuid.UUID = None
@@ -30,20 +31,24 @@ class FailedCreateTransaction(TransactionEvent):
     amount: float = None
     amount_vat: float = None
 
+
 @dataclass
 class CanceledTransaction(TransactionEvent):
     id_transaction: uuid.UUID = None
     updated_at: datetime = None
+
 
 @dataclass
 class ApprovedTransaction(TransactionEvent):
     id_transaction: uuid.UUID = None
     updated_at: datetime = None
 
+
 @dataclass
 class PaidTransaction(TransactionEvent):
     id_transaction: uuid.UUID = None
     updated_at: datetime = None
+
 
 @dataclass
 class FailedApprovedTransaction(TransactionEvent):

@@ -6,5 +6,4 @@ from .repositories import Mapper
 
 class Factory(ABC, ValidateMixinRules):
     @abstractmethod
-    def create_object(self, obj: any, mapper: Mapper = None) -> any:
-        ...
+    def create_object(self, obj: any, mapper: Mapper = None) -> any: ...

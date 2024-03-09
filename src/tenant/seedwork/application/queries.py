@@ -3,8 +3,7 @@ from dataclasses import dataclass
 from functools import singledispatch
 
 
-class Query(ABC):
-    ...
+class Query(ABC): ...
 
 
 @dataclass
