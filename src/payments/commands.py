@@ -23,9 +23,9 @@ class CommandPayTransaction(Record):
     id = String(default=str(uuid.uuid4()))
     time = Long()
     ingestion = Long(default=time_millis())
-    specversion = String(default="v1")
+    spec_version = String(default="v1")
     type = String(default="CommandPayTransaction")
-    datacontenttype = String()
+    data_content_type = String()
     service_name = String(default="payments.pda")
     data = PayTransactionPayload
 
@@ -37,9 +37,9 @@ class CommandReversePayment(Record):
     id = String(default=str(uuid.uuid4()))
     time = Long()
     ingestion = Long(default=time_millis())
-    specversion = String(default="v1")
+    spec_version = String(default="v1")
     type = String(default="CommandReversePayment")
-    datacontenttype = String()
+    data_content_type = String()
     service_name = String(default="payments.pda")
     data = ReversePaymentPayload
 

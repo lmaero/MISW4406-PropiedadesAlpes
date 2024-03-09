@@ -12,26 +12,32 @@ class SagaCoordinator(ABC):
     correlation_id: uuid.UUID
 
     @abstractmethod
-    def persist_in_saga_log(self, msg): ...
+    def persist_in_saga_log(self, msg):
+        pass
 
     @abstractmethod
-    def build_command(self, event: DomainEvent, commant_type: type) -> Command: ...
+    def build_command(self, event: DomainEvent, command_type: type) -> Command:
+        pass
 
-    def publish_command(self, event: DomainEvent, commant_type: type):
-        command = self.build_command(event, commant_type)
+    def publish_command(self, event: DomainEvent, command_type: type):
+        command = self.build_command(event, command_type)
         execute_command(command)
 
     @abstractmethod
-    def init_steps(self): ...
+    def init_steps(self):
+        pass
 
     @abstractmethod
-    def process_event(self, event: DomainEvent): ...
+    def process_event(self, event: DomainEvent):
+        pass
 
     @abstractmethod
-    def start(): ...
+    def start(self):
+        pass
 
     @abstractmethod
-    def finish(): ...
+    def finish(self):
+        pass
 
 
 class Step:
@@ -46,7 +52,8 @@ class Start(Step):
 
 
 @dataclass
-class End(Step): ...
+class End(Step):
+    pass
 
 
 @dataclass
@@ -56,13 +63,6 @@ class SagaTransaction(Step):
     error: DomainEvent
     compensation: Command
     successfully: bool
-
-
-class ChoreographyCoordinator(SagaCoordinator, ABC):
-    # TODO Piense como podemos hacer un Coordinador con coreografía y Sagas
-    # Piense en como se tiene la clase Transaccion, donde se cuenta con un atributo de compensación
-    # ¿Tal vez un manejo de tuplas o diccionarios?
-    ...
 
 
 class OrchestrationCoordinator(SagaCoordinator, ABC):
@@ -78,13 +78,13 @@ class OrchestrationCoordinator(SagaCoordinator, ABC):
         raise Exception("Event is not part of the transaction")
 
     def is_last_saga_transaction(self, index):
-        return len(self.pasos) - 1
+        return len(self.steps) - 1
 
     def process_event(self, event: DomainEvent):
         step, index = self.get_step_given_an_event(event)
         if self.is_last_saga_transaction(index) and not isinstance(event, step.error):
             self.finish()
         elif isinstance(event, step.error):
-            self.publish_command(event, self.step[index - 1].compensation)
+            self.publish_command(event, self.steps[index - 1].compensation)
         elif isinstance(event, step.event):
             self.publish_command(event, self.steps[index + 1].compensation)

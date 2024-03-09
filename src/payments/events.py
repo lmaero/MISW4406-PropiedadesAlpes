@@ -25,9 +25,9 @@ class EventPayment(Record):
     id = String(default=str(uuid.uuid4()))
     time = Long()
     ingestion = Long(default=time_millis())
-    specversion = String(default="v1")
+    spec_version = String(default="v1")
     type = String(default="EventPayment")
-    datacontenttype = String()
+    data_content_type = String()
     service_name = String(default="payments.pda")
     paid_transaction = PaidTransaction
     reversed_payment = ReversedPayment

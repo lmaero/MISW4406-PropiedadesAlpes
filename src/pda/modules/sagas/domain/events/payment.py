@@ -7,7 +7,8 @@ from datetime import datetime
 from pda.seedwork.domain.events import DomainEvent
 
 
-class PaymentEvent(DomainEvent): ...
+class PaymentEvent(DomainEvent):
+    pass
 
 
 @dataclass

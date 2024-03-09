@@ -72,7 +72,7 @@ async def test_paid_transaction() -> dict[str, str]:
     event = EventPayment(
         time=utils.time_millis(),
         ingestion=utils.time_millis(),
-        datacontenttype=PaidTransaction.__name__,
+        data_content_type=PaidTransaction.__name__,
         paid_transaction=payload,
     )
 
@@ -93,7 +93,7 @@ async def test_reversed_payment() -> dict[str, str]:
     event = EventPayment(
         time=utils.time_millis(),
         ingestion=utils.time_millis(),
-        datacontenttype=ReversedPayment.__name__,
+        data_content_type=ReversedPayment.__name__,
         reversed_payment=payload,
     )
 
@@ -116,7 +116,7 @@ async def test_pay_transaction() -> dict[str, str]:
     command = CommandPayTransaction(
         time=utils.time_millis(),
         ingestion=utils.time_millis(),
-        datacontenttype=PayTransactionPayload.__name__,
+        data_content_type=PayTransactionPayload.__name__,
         data=payload,
     )
 
@@ -134,7 +134,7 @@ async def test_reverse_payment() -> dict[str, str]:
     command = CommandReversePayment(
         time=utils.time_millis(),
         ingestion=utils.time_millis(),
-        datacontenttype=ReversePaymentPayload.__name__,
+        data_content_type=ReversePaymentPayload.__name__,
         data=payload,
     )
 

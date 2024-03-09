@@ -1,3 +1,23 @@
+from pda.modules.properties.application.commands.approve_transaction import (
+    ApproveTransaction,
+)
+from pda.modules.properties.application.commands.cancel_transaction import (
+    CancelTransaction,
+)
+from pda.modules.properties.application.commands.create_transaction import (
+    CreateTransaction,
+)
+from pda.modules.properties.domain.events import (
+    CreatedTransaction,
+    ApprovedTransaction,
+    FailedApprovedTransaction,
+    FailedCreateTransaction,
+)
+from pda.modules.sagas.application.commands.payment import (
+    PayTransaction,
+    ReversePayment,
+)
+from pda.modules.sagas.domain.events.payment import PaidTransaction, FailedPayment
 from pda.seedwork.application.sagas import (
     OrchestrationCoordinator,
     SagaTransaction,
@@ -6,39 +26,10 @@ from pda.seedwork.application.sagas import (
 )
 from pda.seedwork.domain.events import DomainEvent
 
-from pda.modules.sagas.application.commands.payment import (
-    PayTransaction,
-    ReversePayment,
-)
 
-from pda.modules.properties.application.commands.create_transaction import (
-    CreateTransaction,
-)
-from pda.modules.properties.application.commands.approve_transaction import (
-    ApproveTransaction,
-)
-from pda.modules.properties.application.commands.cancel_transaction import (
-    CancelTransaction,
-)
-from pda.modules.properties.domain.events import (
-    CreatedTransaction,
-    ApprovedTransaction,
-    FailedApprovedTransaction,
-    FailedCreateTransaction,
-)
-from pda.modules.sagas.domain.events.payment import PaidTransaction, FailedPayment
-
-
-class TransactionCoordinator(OrchestrationCoordinator):
-
+class TransactionsCoordinator(OrchestrationCoordinator):
     def init_steps(self):
         self.steps = [
-            # Inicio(index=0),
-            # Transaccion(index=1, comando=CrearReserva, evento=ReservaCreada, error=CreacionReservaFallida, compensacion=CancelarReserva),
-            # Transaccion(index=2, comando=PagarReserva, evento=ReservaPagada, error=PagoFallido, compensacion=RevertirPago),
-            # Transaccion(index=3, comando=ConfirmarReserva, evento=ReservaGDSConfirmada, error=ConfirmacionFallida, compensacion=ConfirmacionGDSRevertida),
-            # Transaccion(index=4, comando=AprobarReserva, evento=ReservaAprobada, error=AprobacionReservaFallida, compensacion=CancelarReserva),
-            # Fin(index=5)
             Start(index=0),
             SagaTransaction(
                 index=1,
@@ -46,6 +37,7 @@ class TransactionCoordinator(OrchestrationCoordinator):
                 event=CreatedTransaction,
                 error=FailedCreateTransaction,
                 compensation=CancelTransaction,
+                successfully=False,
             ),
             SagaTransaction(
                 index=2,
@@ -53,6 +45,7 @@ class TransactionCoordinator(OrchestrationCoordinator):
                 event=PaidTransaction,
                 error=FailedPayment,
                 compensation=ReversePayment,
+                successfully=False,
             ),
             SagaTransaction(
                 index=3,
@@ -60,8 +53,9 @@ class TransactionCoordinator(OrchestrationCoordinator):
                 event=ApprovedTransaction,
                 error=FailedApprovedTransaction,
                 compensation=CancelTransaction,
+                successfully=False,
             ),
-            End(index=3),
+            End(index=4),
         ]
 
     def start(self):
@@ -71,12 +65,15 @@ class TransactionCoordinator(OrchestrationCoordinator):
         self.persist_in_saga_log(self.steps[-1])
 
     def persist_in_saga_log(self, msg):
-        # TODO Persistir estado en DB
-        # Probablemente usted podría usar un repositorio para ello
-        ...
+        pass
 
     def build_command(self, event: DomainEvent, commant_type: type):
-        # TODO Transforma un evento en la entrada de un comando
-        # Por ejemplo si el evento que llega es ReservaCreada y el tipo_comando es PagarReserva
-        # Debemos usar los atributos de ReservaCreada para crear el comando PagarReserva
-        ...
+        pass
+
+
+def listen_message(message):
+    if isinstance(message, DomainEvent):
+        coordinator = TransactionsCoordinator()
+        coordinator.process_event(message)
+    else:
+        raise NotImplementedError("Message is not a domain event")
