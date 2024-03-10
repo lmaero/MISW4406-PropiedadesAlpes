@@ -2,7 +2,6 @@ import os
 import time
 import uuid
 
-import _pulsar
 import pulsar
 from pulsar.schema import *
 
@@ -36,18 +35,23 @@ HOSTNAME = os.getenv("PULSAR_ADDRESS", default="localhost")
 
 client = pulsar.Client(f"pulsar://{HOSTNAME}:6650")
 consumer = client.subscribe(
-    "transaction-events",
-    consumer_type=_pulsar.ConsumerType.Shared,
-    subscription_name="sub-notification-transactions-events",
-    schema=AvroSchema(CreatedTransactionEvent),
+    "start-transaction",
+    # consumer_type=_pulsar.ConsumerType.Shared,
+    subscription_name="start-transaction_notification",
+    # schema=AvroSchema(CreatedTransactionEvent),
 )
+
+producer = client.create_producer("notify-transaction")
 
 while True:
     msg = consumer.receive()
-    print("=========================================")
-    print("Received Message: '%s'" % msg.value().data)
-    print("=========================================")
+    # print("=========================================")
+    print("Received Message: '%s'" % msg.value())
+    # print("=========================================")
 
-    print("==== Sending email to the user ====")
+    producer.send(("Notification").encode("utf-8"))
+
+    # print("==== Sending email to the user ====")
 
     consumer.acknowledge(msg)
+    # client.close()

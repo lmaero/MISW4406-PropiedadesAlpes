@@ -1,5 +1,6 @@
 import json
 
+import pulsar
 from flask import Response, session
 from flask import request
 
@@ -12,6 +13,7 @@ from pda.modules.properties.application.queries.get_transaction import GetTransa
 from pda.seedwork.application.commands import execute_command
 from pda.seedwork.application.queries import execute_query
 from pda.seedwork.domain.exceptions import DomainException
+from pda.seedwork.infrastructure import utils
 
 bp = api.create_blueprint("properties", "/properties")
 
@@ -32,6 +34,11 @@ def create_transaction_command():
             transaction_dto.updated_at,
             transaction_dto.leases,
         )
+
+        client = pulsar.Client(f"pulsar://{utils.broker_host()}:6650")
+        publisher = client.create_producer("start-transaction")
+        publisher.send(("Transaction").encode("utf-8"))
+        client.close()
 
         execute_command(command)
 

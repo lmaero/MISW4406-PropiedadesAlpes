@@ -1,6 +1,7 @@
 import asyncio
 from typing import Any
 
+import pulsar
 from fastapi import FastAPI
 from pydantic import BaseSettings
 
@@ -25,6 +26,19 @@ app_configs: dict[str, Any] = {"title": "Payments PDA"}
 
 app = FastAPI(**app_configs)
 tasks = list()
+
+client = pulsar.Client(f"pulsar://{utils.broker_host()}:6650")
+consumer = client.subscribe("notify-transaction", "payments")
+
+
+while True:
+    msg = consumer.receive()
+    # print("=========================================")
+    print("Received Message: '%s'" % msg.value())
+    # print("=========================================")
+
+    consumer.acknowledge(msg)
+    # client.close()
 
 
 @app.on_event("startup")
