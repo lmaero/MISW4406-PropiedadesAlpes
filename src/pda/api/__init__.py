@@ -10,7 +10,6 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 def register_handlers():
     import pda.modules.client.application
     import pda.modules.properties.application
-    import pda.modules.tenant.application
 
 
 # noinspection PyUnresolvedReferences

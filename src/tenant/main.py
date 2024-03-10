@@ -1,6 +1,8 @@
 import asyncio
 
 from fastapi import FastAPI
+import pulsar
+import json
 
 from tenant.api.v1.router import router as v1
 from tenant.config.api import app_configs
@@ -25,6 +27,26 @@ from tenant.seedwork.infrastructure import utils
 
 app = FastAPI(**app_configs)
 tasks = list()
+
+client = pulsar.Client(f"pulsar://{utils.broker_host()}:6650")
+consumer = client.subscribe(
+    "start-transaction",
+    subscription_name="start-transaction_tenant",
+)
+
+producer = client.create_producer("pay-transaction")
+rollback_producer = client.create_producer("rollback-transaction")
+
+while True:
+    msg = consumer.receive()
+    msg_dict = json.loads(msg.value().decode("utf-8"))
+    tenant_info = msg_dict['tenant']
+    # print("=========================================")
+    print("Received Message: '%s'" % tenant_info)
+    # print("=========================================")
+    producer.send(msg.value())
+    consumer.acknowledge(msg)
+    # client.close()
 
 
 @app.on_event("startup")

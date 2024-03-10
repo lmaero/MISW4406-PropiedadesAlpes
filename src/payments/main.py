@@ -4,6 +4,7 @@ from typing import Any
 import pulsar
 from fastapi import FastAPI
 from pydantic import BaseSettings
+import json
 
 from . import utils
 from .commands import (
@@ -28,15 +29,19 @@ app = FastAPI(**app_configs)
 tasks = list()
 
 client = pulsar.Client(f"pulsar://{utils.broker_host()}:6650")
-consumer = client.subscribe("notify-transaction", "payments")
+consumer = client.subscribe("pay-transaction", "payments_tenant")
+
+producer = client.create_producer("notify-payments")
 
 
 while True:
     msg = consumer.receive()
+    msg_dict = json.loads(msg.value().decode("utf-8"))
+    payment_info = msg_dict['payment']
     # print("=========================================")
-    print("Received Message: '%s'" % msg.value())
+    print("Received Message: '%s'" % payment_info)
     # print("=========================================")
-
+    producer.send(("Transaction paid").encode("utf-8"))
     consumer.acknowledge(msg)
     # client.close()
 

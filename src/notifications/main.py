@@ -35,13 +35,9 @@ HOSTNAME = os.getenv("PULSAR_ADDRESS", default="localhost")
 
 client = pulsar.Client(f"pulsar://{HOSTNAME}:6650")
 consumer = client.subscribe(
-    "start-transaction",
-    # consumer_type=_pulsar.ConsumerType.Shared,
+    "notify-payments",
     subscription_name="start-transaction_notification",
-    # schema=AvroSchema(CreatedTransactionEvent),
 )
-
-producer = client.create_producer("notify-transaction")
 
 while True:
     msg = consumer.receive()
@@ -49,7 +45,7 @@ while True:
     print("Received Message: '%s'" % msg.value())
     # print("=========================================")
 
-    producer.send(("Notification").encode("utf-8"))
+    # producer.send(("Notification").encode("utf-8"))
 
     # print("==== Sending email to the user ====")
 

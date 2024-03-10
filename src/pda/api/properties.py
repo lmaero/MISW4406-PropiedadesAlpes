@@ -37,7 +37,7 @@ def create_transaction_command():
 
         client = pulsar.Client(f"pulsar://{utils.broker_host()}:6650")
         publisher = client.create_producer("start-transaction")
-        publisher.send(("Transaction").encode("utf-8"))
+        publisher.send(json.dumps(transaction_data).encode("utf-8"))
         client.close()
 
         execute_command(command)
