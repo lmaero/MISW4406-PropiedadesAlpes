@@ -1,0 +1,41 @@
+{
+	"info": {
+		"_postman_id": "a67fee29-4210-4b9c-8c68-cd7e460c390d",
+		"name": "No Monoliticas - Entrega 9",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27331484",
+		"_collection_link": "https://digital-femsasalud.postman.co/workspace/DDC---Personalizacion~9d5e34a3-b2a5-4de3-a40a-e89f0c7e3bed/collection/27331484-a67fee29-4210-4b9c-8c68-cd7e460c390d?action=share&source=collection_link&creator=27331484"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8004/properties/transaction",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"location\": \"Bucaramanga\",\n    \"leases\": [\n        {\n            \"payments\": [\n                {\n                    \"amount\": 100.00,\n                    \"date\": \"2022-11-22T15:10:00Z\"\n                }\n            ]\n        }\n    ],\n    \"payment\": {\n        \"amount\": 100.00,\n        \"amount_vat\": 119.00\n    },\n    \"tenant\": {\n        \"name\": \"Diego\",\n        \"last_name\": \"Eslava\"\n    }\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8004/v1/properties/transaction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8004",
+					"path": [
+						"v1",
+						"properties",
+						"transaction"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

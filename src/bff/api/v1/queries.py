@@ -1,6 +1,7 @@
 import strawberry
-from .schemas import *
+import typing
+from .schemas import get_transactions, Transaction
 
 @strawberry.type
 class Query:
-    transactions: typing.List[Transaction] = strawberry.field(resolve=get_transactions)
+    transactions: typing.List[Transaction] = strawberry.field(resolver=get_transactions)

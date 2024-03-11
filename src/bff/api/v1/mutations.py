@@ -1,11 +1,9 @@
 import strawberry
-import typing
-
+import uuid
 from strawberry.types import Info
-from bff_web import utils
-from bff_web.despachadores import Dispatcher
-
-from .schemas import *
+from bff import utils
+from bff.dispatchers import Dispatcher
+from .schemas import TransactionAnswer
 
 
 @strawberry.type

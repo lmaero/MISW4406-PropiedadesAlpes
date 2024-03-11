@@ -18,12 +18,18 @@ def unix_time_millis(dt):
 def millis_a_datetime(millis):
     return datetime.datetime.fromtimestamp(millis/1000.0)
 
+def pda_host():
+    return os.getenv("PDA_ENV", default="localhost")
+
+def pda_port():
+    return os.getenv("PDA_PORT", default="8004")
+
 def broker_host():
-    return os.getenv(PULSAR_ENV, default="localhost")
+    return os.getenv("PULSAR_ENV", default="localhost")
 
 def get_schema_registry(topico: str) -> dict:
     json_registry = requests.get(f'http://{broker_host()}:8080/admin/v2/schemas/{topico}/schema').json()
-    return json.loads(json_registry.get('data',{}))
+    return json.loads(json.dumps(json_registry.get('data',{})))
 
 def get_schema_avro_from_dictionary(json_schema: dict) -> AvroSchema:
     schema_definition = parse_schema(json_schema)

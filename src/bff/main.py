@@ -1,17 +1,15 @@
 from fastapi import FastAPI, Request
 import asyncio
-import time
 import traceback
-import uvicorn
-import uuid
-import datetime
+import requests
+import json
 
 
 from pydantic import BaseSettings
 from typing import Any
 
-from .consumidores import suscribirse_a_topico
-from .despachadores import Despachador
+from .consumers import suscribe_to_topic
+from .dispatchers import Dispatcher
 
 from . import utils
 from .api.v1.router import router as v1
@@ -26,13 +24,13 @@ app_configs: dict[str, Any] = {"title": "BFF-Web PDA"}
 
 app = FastAPI(**app_configs)
 tasks = list()
-eventos = list()
+events = list()
 
 @app.on_event("startup")
 async def app_startup():
     global tasks
     global events
-    task1 = asyncio.ensure_future(suscribirse_a_topico("transaction-event", "pda-bff", "public/default/transactions-event", events=events))
+    task1 = asyncio.ensure_future(suscribe_to_topic("transaction-event", "pda-bff", "public/default/transaction-events", events=events))
     tasks.append(task1)
 
 @app.on_event("shutdown")
@@ -41,24 +39,16 @@ def shutdown_event():
     for task in tasks:
         task.cancel()
 
-@app.get('/stream')
-async def stream_messages(request: Request):
-    def new_event():
-        global events
-        return {'data': eventos.pop(), 'event': 'NewEvent'}
-    async def read_events():
-        global events
-        while True:
-            # If client close the connection stop sending events
-            if await request.is_disconnected():
-                break
-
-            if len(eventss) > 0:
-                yield new_event()
-
-            await asyncio.sleep(0.1)
-
-    return EventSourceResponse(read_events())
+@app.post('/v1/properties/transaction')
+async def create_transaction(request: Request):
+    try:
+        transaction_data = await request.json()
+        response_json = requests.post(f'http://{utils.pda_host()}:{utils.pda_port()}/properties/transactions', json=transaction_data)
+        if response_json.status_code != 202:
+            return {"status": "error", "message": "An error occurred while creating the transaction"}
+        return {"status": "success", "message": "Transaction created successfully"}
+    except Exception as e:
+        traceback.print_exc()
+        return {"status": "error", "message": "An error occurred while creating the transaction"}
 
 
-app.include_router(v1, prefix="/v1")
