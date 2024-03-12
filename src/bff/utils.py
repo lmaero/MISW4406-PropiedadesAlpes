@@ -22,7 +22,7 @@ def pda_host():
     return os.getenv("PDA_ENV", default="localhost")
 
 def pda_port():
-    return os.getenv("PDA_PORT", default="8004")
+    return os.getenv("PDA_PORT", default="5001")
 
 def broker_host():
     return os.getenv("PULSAR_ENV", default="localhost")

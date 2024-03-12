@@ -1,6 +1,7 @@
 import json
 
 import pulsar
+import uuid
 from flask import Response, session
 from flask import request
 
@@ -10,6 +11,7 @@ from pda.modules.properties.application.commands.create_transaction import (
 )
 from pda.modules.properties.application.mappers import TransactionMapperDTOJson
 from pda.modules.properties.application.queries.get_transaction import GetTransaction
+from pda.modules.sagas.infrastructure.utils import add_saga_log
 from pda.seedwork.application.commands import execute_command
 from pda.seedwork.application.queries import execute_query
 from pda.seedwork.domain.exceptions import DomainException
@@ -34,13 +36,19 @@ def create_transaction_command():
             transaction_dto.updated_at,
             transaction_dto.leases,
         )
+        execute_command(command)
 
         client = pulsar.Client(f"pulsar://{utils.broker_host()}:6650")
         publisher = client.create_producer("start-transaction")
-        publisher.send(json.dumps(transaction_data).encode("utf-8"))
+        correlation_id = str(uuid.uuid4())
+        transaction_json = {
+            "id": correlation_id,
+            "transaction": transaction_data,
+        }
+        print(transaction_json)
+        publisher.send(json.dumps(transaction_json).encode("utf-8"))
+        add_saga_log(correlation_id, "transaction-created")
         client.close()
-
-        execute_command(command)
 
         return Response("{}", status=202, mimetype="application/json")
     except DomainException as e:

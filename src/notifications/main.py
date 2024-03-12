@@ -41,13 +41,5 @@ consumer = client.subscribe(
 
 while True:
     msg = consumer.receive()
-    # print("=========================================")
     print("Received Message: '%s'" % msg.value())
-    # print("=========================================")
-
-    # producer.send(("Notification").encode("utf-8"))
-
-    # print("==== Sending email to the user ====")
-
     consumer.acknowledge(msg)
-    # client.close()

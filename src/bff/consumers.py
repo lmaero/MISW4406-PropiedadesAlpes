@@ -19,7 +19,6 @@ async def suscribe_to_topic(topic: str, suscription: str, schema: str, consumer_
             ) as consumer:
                 while True:
                     message = await consumer.receive()
-                    print(message)
                     data = message.value()
                     print(f'Evento recibido: {data}')
                     events.append(str(data))

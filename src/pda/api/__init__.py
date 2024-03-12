@@ -16,6 +16,7 @@ def register_handlers():
 def import_sql_alchemy_models():
     import pda.modules.client.infrastructure.dto
     import pda.modules.properties.infrastructure.dto
+    import pda.modules.sagas.infrastructure.dto
 
 
 def start_consumer(app):

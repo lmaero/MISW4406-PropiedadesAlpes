@@ -198,7 +198,7 @@ services:
       - SYS_NICE
     restart: always
     environment:
-      - MYSQL_DATABASE=transactions
+      - MYSQL_DATABASE=pda
       - MYSQL_ROOT_PASSWORD=admin
     profiles:
       - pda

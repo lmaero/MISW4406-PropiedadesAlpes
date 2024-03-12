@@ -22,10 +22,7 @@ def database_connection(
     if not isinstance(config, dict):
         raise DatabaseConfigException
 
-    if config.get("TESTING", False):
-        return f'sqlite:///{os.path.join(basedir, "database.db")}'
-    else:
-        return f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOSTNAME}/transactions"
+    return f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOSTNAME}/pda"
 
 
 def init_db(app: Flask):

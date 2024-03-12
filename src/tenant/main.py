@@ -1,8 +1,9 @@
 import asyncio
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 import pulsar
 import json
+from sqlalchemy.orm import Session
 
 from tenant.api.v1.router import router as v1
 from tenant.config.api import app_configs
@@ -23,10 +24,16 @@ from tenant.module.infrastructure.v1.events import (
     DeactivatedTenant,
     RegisteredTenant,
 )
+from tenant.config.db import Base, engine
 from tenant.seedwork.infrastructure import utils
+from tenant.config.utils import add_saga_log
+
 
 app = FastAPI(**app_configs)
 tasks = list()
+
+Base.metadata.create_all(engine)
+session = Session(engine)
 
 client = pulsar.Client(f"pulsar://{utils.broker_host()}:6650")
 consumer = client.subscribe(
@@ -34,19 +41,19 @@ consumer = client.subscribe(
     subscription_name="start-transaction_tenant",
 )
 
+
 producer = client.create_producer("pay-transaction")
 rollback_producer = client.create_producer("rollback-transaction")
 
 while True:
     msg = consumer.receive()
     msg_dict = json.loads(msg.value().decode("utf-8"))
-    tenant_info = msg_dict['tenant']
-    # print("=========================================")
+    correlation_id = msg_dict['id']
+    tenant_info = msg_dict['transaction']['tenant']
     print("Received Message: '%s'" % tenant_info)
-    # print("=========================================")
+    add_saga_log(correlation_id, "tenant-validated")
     producer.send(msg.value())
     consumer.acknowledge(msg)
-    # client.close()
 
 
 @app.on_event("startup")

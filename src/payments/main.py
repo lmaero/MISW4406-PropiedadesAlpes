@@ -5,6 +5,7 @@ import pulsar
 from fastapi import FastAPI
 from pydantic import BaseSettings
 import json
+from sqlalchemy.orm import Session
 
 from . import utils
 from .commands import (
@@ -17,6 +18,9 @@ from .consumers import subscribe_to_topic
 from .dispatchers import Dispatcher
 from .events import EventPayment, PaidTransaction, ReversedPayment
 
+from payments.config.db import Base, engine
+from payments.config.utils import add_saga_log
+
 
 class Config(BaseSettings):
     APP_VERSION: str = "1"
@@ -28,6 +32,9 @@ app_configs: dict[str, Any] = {"title": "Payments PDA"}
 app = FastAPI(**app_configs)
 tasks = list()
 
+Base.metadata.create_all(engine)
+session = Session(engine)
+
 client = pulsar.Client(f"pulsar://{utils.broker_host()}:6650")
 consumer = client.subscribe("pay-transaction", "payments_tenant")
 
@@ -37,13 +44,12 @@ producer = client.create_producer("notify-payments")
 while True:
     msg = consumer.receive()
     msg_dict = json.loads(msg.value().decode("utf-8"))
-    payment_info = msg_dict['payment']
-    # print("=========================================")
+    correlation_id = msg_dict['id']
+    payment_info = msg_dict['transaction']['payment']
     print("Received Message: '%s'" % payment_info)
-    # print("=========================================")
     producer.send(("Transaction paid").encode("utf-8"))
+    add_saga_log(correlation_id, "transaction-paid")
     consumer.acknowledge(msg)
-    # client.close()
 
 
 @app.on_event("startup")
