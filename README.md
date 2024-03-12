@@ -10,6 +10,9 @@ El repositorio en su raíz está estructurado de la siguiente forma:
 - **src**: En este directorio encuentra el código fuente para Propiedades de los Alpes.
 - **src/pda**: En este directorio se encuentra el código fuente para la aplicación Flask.
 - **src/notifications**: En este directorio se encuentra el código fuente para el módulo de notificaciones.
+- **src/payments**: En este directorio se encuentra el código fuente para el módulo de pagos.
+- **src/tenant**: En este directorio se encuentra el código fuente para el módulo de arrendatarios.
+- **src/bff**: En este directorio se encuentra el código fuente para el módulo de Backend for Frontend.
 - **src/ui**: En este directorio se encuentra el código fuente para la app web/interfaz gráfica.
 - **.gitignore**: Archivo con la definición de archivos que se deben ignorar en el repositorio GIT
 - **.gitpod.yml**: Archivo que define las tareas/pasos a ejecutar para configurar su workspace en Gitpod
@@ -17,6 +20,9 @@ El repositorio en su raíz está estructurado de la siguiente forma:
 - **requirements.txt**: Archivo con los requerimientos para el correcto funcionamiento del ms pda (librerias Python)
 - **notification-requirements.txt**: Archivo con los requerimientos para el correcto funcionamiento del ms notifications (librerias Python)
 - **ui-requirements.txt**: Archivo con los requerimientos para el correcto funcionamiento del ms ui (librerias Python)
+- **tenant-requirements.txt**: Archivo con los requerimientos para el correcto funcionamiento del ms tenant (librerias Python)
+- **payments-requirements.txt**: Archivo con los requerimientos para el correcto funcionamiento del ms payments (librerias Python)
+- **bff-requirements.txt**: Archivo con los requerimientos para el correcto funcionamiento del ms bff (librerias Python)
 
 ## Escenarios de calidad a probar
 - Escenario #9: Modificabilidad
@@ -33,20 +39,53 @@ El repositorio en su raíz está estructurado de la siguiente forma:
 
 
 
-
-
 ## Ejecutar Aplicación
 
-Para la ejecución de la aplicación, lo primero que se debe levantar es la infraestructura broker de Apache Pulsar, esta se encuentra configurada para que se monte utilizando contenedores de Docker, por ende, para correr dicho broker, se debe hacer con el siguiente comando de Docker Compose:
+Para la ejecución de la aplicación, lo primero que se debe levantar es la infraestructura broker de Apache Pulsar y la del motor MySQL, esta se encuentra configurada para que se monte utilizando contenedores de Docker, por ende, para correr dicho broker, se debe hacer con el siguiente comando de Docker Compose:
 
 ```bash
-docker compose --profile pulsar up --build
+docker compose --profile pulsar up
 ```
 
-Cabe destacar que dicho comando construira las imagenes de docker asociadas a Apache Pulsar (obtenidas desde el catálogos de imágenes de Docker), si es que estás existen.
+y en otra terminal, levantar el perfil de base de datos en MySQL
+
+```bash
+docker compose --profile db up
+```
+
+Cabe destacar que dicho comando construira las imagenes de docker asociadas a Apache Pulsar y MySQL (obtenidas desde el catálogos de imágenes de Docker), si es que estás existen.
 
 
 Ahora es posible ejecutar los microservicios ui, pda/transactions y notifications. 
+
+
+### PDA/Transactions
+Desde el directorio principal ejecute el siguiente comando.
+
+```bash
+flask --app src/pda/api run --port 5001
+```
+
+### Tenant
+Desde el directorio `src` ejecute el siguiente comando
+
+```bash
+uvicorn tenant.main:app --host localhost --port 8002 --reload
+```
+
+### Payments
+Desde el directorio `src` ejecute el siguiente comando
+
+```bash
+uvicorn payments.main:app --host localhost --port 8001 --reload
+```
+
+### BFF
+Desde el directorio `src` ejecute el siguiente comando
+
+```bash
+uvicorn bff.main:app --host localhost --port 8005 --reload 
+```
 
 ### UI
 Desde el directorio principal ejecute el siguiente comando.
@@ -62,46 +101,19 @@ Desde el directorio principal ejecute el siguiente comando.
 python src/notifications/main.py
 ```
 
-### Tenant
-Desde el directorio `src` ejecute el siguiente comando
-
-```bash
-uvicorn cliente.main:app --host localhost --port 8000 --reload
-```
-
-### Payments
-Desde el directorio `src` ejecute el siguiente comando
-
-```bash
-uvicorn payments.main:app --host localhost --port 8001 --reload
-```
-
-### PDA/Transactions
-Desde el directorio principal ejecute el siguiente comando.
-
-```bash
-flask --app src/pda/api run
-```
-
-Siempre puede ejecutarlo en modo DEBUG:
-
-```bash
-flask --app src/pda/api --debug run
-```
-
-
 ## Request de ejemplo
 
 Los siguientes JSON pueden ser usados para probar el API:
 
-### Create Transaction (Async - using command)
+### Create Transaction (by BFF)
 
-- **Endpoint**: `/properties/transactions`
+- **Endpoint**: `/v1/properties/transactions`
 - **Método**: `POST`
 - **Headers**: `Content-Type='aplication/json'`
 
 ```json
 {
+    "location": "Bucaramanga",
     "leases": [
         {
             "payments": [
@@ -111,12 +123,15 @@ Los siguientes JSON pueden ser usados para probar el API:
                 }
             ]
         }
-    ]
+    ],
+    "payment": {
+        "amount": 100.00,
+        "amount_vat": 119.00
+    },
+    "tenant": {
+        "name": "Diego",
+        "last_name": "Eslava"
+    }
+
 }
 ```
-
-### Get Transaction (Async - using query) [Work In Progress]
-
-- **Endpoint**: `/properties/transactions/{id}`
-- **Método**: `GET`
-- **Headers**: `Content-Type='aplication/json'`
