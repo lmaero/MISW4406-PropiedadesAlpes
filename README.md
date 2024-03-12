@@ -135,3 +135,9 @@ Los siguientes JSON pueden ser usados para probar el API:
 
 }
 ```
+
+### Postman
+Cabe destacar, que dentro del directorio del proyecto, viene la colección de postman asociada a la prueba realizada durante el experimento hecho en el video. El archivo se llama:
+```
+No Monoliticas - Entrega 9.postman_collection
+```
